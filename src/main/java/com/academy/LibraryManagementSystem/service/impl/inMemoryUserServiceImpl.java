@@ -9,9 +9,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
 public class inMemoryUserServiceImpl implements UserService {
     private final InMemoryStudentDao repository;
+
+    public inMemoryUserServiceImpl(InMemoryStudentDao repository) {
+        this.repository = repository;
+    }
 
     @Override
     public List<User> findAllUsers() {

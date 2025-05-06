@@ -1,29 +1,32 @@
 package com.academy.LibraryManagementSystem.service.impl;
 
 
-import lombok.AllArgsConstructor;
 import com.academy.LibraryManagementSystem.model.User;
 
 import com.academy.LibraryManagementSystem.repository.UserRepository;
 import com.academy.LibraryManagementSystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 
 @Primary
 @Service
-@AllArgsConstructor
+@Transactional
 public class UserServiceImpl implements UserService {
-
+    @Autowired
     private final UserRepository userRepository;
+
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public List<User> findAllUsers() {
+
         return userRepository.findAllUsers();
     }
 
@@ -34,7 +37,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByEmail(String email) {
-      return userRepository.findByEmail(email);
+        return userRepository.findByEmail(email);
     }
 
     @Override
