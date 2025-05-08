@@ -1,24 +1,26 @@
 package com.academy.LibraryManagementSystem.service.impl;
 
-import lombok.AllArgsConstructor;
 import com.academy.LibraryManagementSystem.model.User;
-import com.academy.LibraryManagementSystem.repository.InMemoryStudentDao;
+import com.academy.LibraryManagementSystem.repository.InMemoryUserDao;
 import com.academy.LibraryManagementSystem.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class inMemoryUserServiceImpl implements UserService {
-    private final InMemoryStudentDao repository;
 
-    public inMemoryUserServiceImpl(InMemoryStudentDao repository) {
+    private final InMemoryUserDao repository;
+
+    @Autowired
+    public inMemoryUserServiceImpl(InMemoryUserDao repository) {
         this.repository = repository;
     }
 
     @Override
     public List<User> findAllUsers() {
-        return repository.findAllUsers();
+        return repository.findAll();
     }
 
     @Override
@@ -37,8 +39,9 @@ public class inMemoryUserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(String email) {
-        repository.deleteUser(email);
+    public void deleteByEmail(String email) {
+
+        repository.deleteUserByEmail(email);
     }
 
 }

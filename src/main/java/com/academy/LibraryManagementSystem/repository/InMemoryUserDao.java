@@ -8,11 +8,12 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 @Repository
-public class InMemoryStudentDao {
+public class InMemoryUserDao {
+
     private final List<User> USER = new ArrayList<>();
 
 
-    public List<User> findAllUsers() {
+    public List<User> findAll() {
 
         return USER;
     }
@@ -37,7 +38,7 @@ public class InMemoryStudentDao {
         return null;
     }
 
-    public void deleteUser(String email) {
+    public void deleteUserByEmail(String email) {
         var user = findByEmail(email);
         if (user != null) {
             USER.remove(user);

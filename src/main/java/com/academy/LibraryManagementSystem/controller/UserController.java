@@ -17,7 +17,7 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> findAllUsers() {
+    public List<User> findAll() {
 
         return userService.findAllUsers();
     }
@@ -40,6 +40,6 @@ public class UserController {
 
     @DeleteMapping("delete_user/{email}")
     public void deleteUser(@PathVariable String email) {
-        userService.deleteUser(email);
+        userService.deleteByEmail(email);
     }
 }
