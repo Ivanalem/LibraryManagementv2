@@ -1,25 +1,19 @@
 package com.academy.LibraryManagementSystem.model;
 
-
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
 
 import java.sql.Timestamp;
 
-@Entity
-@Table(name="users")
 @Data
-public class User {
+@Entity
+@Table(name = "authors")
+public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String username;
-    private String password;
-    private String email;
-    private String role;
-    private Integer status;
-    @Column(name = "updated_at")
-    private Timestamp updatedAt;
+    private String name;
+    private String biography;
     @Column(name = "created_at")
     private Timestamp createdAt;
 }
