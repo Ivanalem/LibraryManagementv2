@@ -7,11 +7,16 @@ import java.sql.Timestamp;
 
 @Data
 @Table(name = "reviews")
+@Entity
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @ManyToOne
+    @JoinColumn(name = "book_id")
     private Book book;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
     private Integer rating;
     private String comment;
