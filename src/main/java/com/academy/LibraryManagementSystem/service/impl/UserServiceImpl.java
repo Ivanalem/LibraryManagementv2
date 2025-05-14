@@ -7,9 +7,13 @@ import com.academy.LibraryManagementSystem.repository.UserRepository;
 import com.academy.LibraryManagementSystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import java.util.Collections;
 import java.util.List;
 
 
@@ -27,7 +31,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findAllUsers() {
 
-        return (List<User>) userRepository.findAll();
+        return userRepository.findAll();
     }
 
     @Override
@@ -49,5 +53,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteByEmail(String email) {
         userRepository.deleteByEmail(email);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .map(user -> new org.springframework.security.core.userdetails.User(
+                        user.getUsername(),
+                        user.getPassword(),
+                        Collections.singleton(user.getRole())
+                ))
+                .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user "+username));
     }
 }

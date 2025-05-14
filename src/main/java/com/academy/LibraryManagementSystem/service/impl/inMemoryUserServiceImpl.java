@@ -4,6 +4,7 @@ import com.academy.LibraryManagementSystem.model.User;
 import com.academy.LibraryManagementSystem.repository.InMemoryUserDao;
 import com.academy.LibraryManagementSystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,6 +43,11 @@ public class inMemoryUserServiceImpl implements UserService {
     public void deleteByEmail(String email) {
 
         repository.deleteUserByEmail(email);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) {
+        return null;
     }
 
 }

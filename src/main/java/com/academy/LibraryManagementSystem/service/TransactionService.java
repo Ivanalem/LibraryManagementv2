@@ -1,4 +1,4 @@
 package com.academy.LibraryManagementSystem.service;
 
-public class TransactionService {
+public interface TransactionService {
 }

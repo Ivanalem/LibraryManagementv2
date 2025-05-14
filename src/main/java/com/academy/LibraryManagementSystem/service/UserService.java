@@ -1,6 +1,7 @@
 package com.academy.LibraryManagementSystem.service;
 
 import com.academy.LibraryManagementSystem.model.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,4 +18,6 @@ public interface UserService {
     User updateUser(User user);
 
     void deleteByEmail(String email);
+
+    UserDetails loadUserByUsername(String username);
 }

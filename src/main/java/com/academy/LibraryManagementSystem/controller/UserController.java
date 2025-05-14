@@ -2,6 +2,7 @@ package com.academy.LibraryManagementSystem.controller;
 
 import com.academy.LibraryManagementSystem.model.User;
 import com.academy.LibraryManagementSystem.service.UserService;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,7 +38,7 @@ public class UserController {
     public User updateUser(@RequestBody User user) {
         return userService.updateUser(user);
     }
-
+    @Transactional
     @DeleteMapping("delete_user/{email}")
     public void deleteUser(@PathVariable String email) {
         userService.deleteByEmail(email);

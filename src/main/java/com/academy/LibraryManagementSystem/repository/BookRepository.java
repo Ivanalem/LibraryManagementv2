@@ -1,4 +1,4 @@
 package com.academy.LibraryManagementSystem.repository;
 
-public class BookRepository {
+public interface BookRepository {
 }
