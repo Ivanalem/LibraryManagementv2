@@ -1,14 +1,12 @@
 package com.academy.LibraryManagementSystem.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
 @Entity
@@ -28,4 +26,7 @@ public class Book {
     private Timestamp updatedAt;
     @Column(name = "created_at")
     private Timestamp createdAt;
+
+    @ManyToMany(mappedBy = "books")
+    private List<Author> authors;
 }
