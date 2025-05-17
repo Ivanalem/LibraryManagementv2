@@ -45,9 +45,5 @@ public class inMemoryUserServiceImpl implements UserService {
         repository.deleteUserByEmail(email);
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) {
-        return null;
-    }
 
 }

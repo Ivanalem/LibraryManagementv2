@@ -18,6 +18,4 @@ public interface UserService {
     User updateUser(User user);
 
     void deleteByEmail(String email);
-
-    UserDetails loadUserByUsername(String username);
 }
