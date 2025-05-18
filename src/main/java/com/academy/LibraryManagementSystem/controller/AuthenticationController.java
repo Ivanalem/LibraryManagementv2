@@ -1,32 +1,30 @@
 package com.academy.LibraryManagementSystem.controller;
 
-import com.academy.LibraryManagementSystem.dto.AuthRequest;
-import com.academy.LibraryManagementSystem.utils.JWTUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.academy.LibraryManagementSystem.dto.JwtRequestDto;
+import com.academy.LibraryManagementSystem.dto.JwtResponseDto;
+import com.academy.LibraryManagementSystem.utils.JwtUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
+@RequiredArgsConstructor
 public class AuthenticationController {
-    @Autowired
-    private JWTUtils jwtUtils;
+    private final JwtUtils jwtUtils;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    @PostMapping(value = "/auth")
+    public JwtResponseDto auth(@RequestBody JwtRequestDto request) {
 
-    @PostMapping("/api/v1/users/login")
-    public String create(@RequestBody AuthRequest authRequest) {
-        var authentication = new UsernamePasswordAuthenticationToken(
-                authRequest.getUsername(), authRequest.getPassword());
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getUserName(),
+                        request.getPassword()));
 
-        authenticationManager.authenticate(authentication);
+        String token = jwtUtils.generateToken(request.getUserName());
 
-        return jwtUtils.generateToken(authRequest.getUsername());
-
+        return new JwtResponseDto(token);
     }
 }
