@@ -1,11 +1,10 @@
 package com.academy.LibraryManagementSystem.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-public class AuthRequest {
+@Data
+public class JwtRequestDto {
+
     private String username;
     private String password;
 }

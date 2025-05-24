@@ -25,8 +25,8 @@ public class UserController {
 
     @PostMapping("save_user")
     public String saveUser(@RequestBody User user) {
-         userService.saveUser(user);
-         return "User successfully saved";
+        userService.saveUser(user);
+        return "User successfully saved";
     }
 
     @GetMapping("/{email}")
@@ -38,6 +38,7 @@ public class UserController {
     public User updateUser(@RequestBody User user) {
         return userService.updateUser(user);
     }
+
     @Transactional
     @DeleteMapping("delete_user/{email}")
     public void deleteUser(@PathVariable String email) {

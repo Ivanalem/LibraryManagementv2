@@ -1,7 +1,9 @@
 package com.academy.LibraryManagementSystem.controller;
 
-import com.academy.LibraryManagementSystem.dto.AuthRequest;
-import com.academy.LibraryManagementSystem.utils.JWTUtils;
+import com.academy.LibraryManagementSystem.dto.JwtRequestDto;
+import com.academy.LibraryManagementSystem.dto.JwtResponseDto;
+import com.academy.LibraryManagementSystem.utils.JwtUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,21 +14,26 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class AuthenticationController {
-    @Autowired
-    private JWTUtils jwtUtils;
+
+    private final JwtUtils jwtUtils;
+    private final AuthenticationManager authenticationManager;
 
     @Autowired
-    private AuthenticationManager authenticationManager;
+    public AuthenticationController(AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
+        this.authenticationManager = authenticationManager;
+        this.jwtUtils = jwtUtils;
+    }
 
-    @PostMapping("/api/v1/users/login")
-    public String create(@RequestBody AuthRequest authRequest) {
-        var authentication = new UsernamePasswordAuthenticationToken(
-                authRequest.getUsername(), authRequest.getPassword());
+    @PostMapping("/auth")
+    public JwtResponseDto auth(@RequestBody
+                               JwtRequestDto requestDto) {
 
-        authenticationManager.authenticate(authentication);
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(requestDto.getUsername(), requestDto.getPassword()));
 
-        return jwtUtils.generateToken(authRequest.getUsername());
+        String token = jwtUtils.generateToken(requestDto.getUsername());
 
+        return new JwtResponseDto(token);
     }
 }
