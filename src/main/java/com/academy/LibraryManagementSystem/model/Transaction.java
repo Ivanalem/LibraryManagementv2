@@ -1,13 +1,17 @@
 package com.academy.LibraryManagementSystem.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
 @Data
 @Table(name = "transactions")
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,5 +28,6 @@ public class Transaction {
     private Timestamp transactionDate;
     @Column(name = "due_date")
     private Timestamp dueDate;
+
     private Integer status;
 }
