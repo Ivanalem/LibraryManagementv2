@@ -1,39 +1,47 @@
 package com.academy.LibraryManagementSystem.controller;
 
-import com.academy.LibraryManagementSystem.dto.JwtRequestDto;
-import com.academy.LibraryManagementSystem.dto.JwtResponseDto;
-import com.academy.LibraryManagementSystem.utils.JwtUtils;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.academy.LibraryManagementSystem.model.User;
+import com.academy.LibraryManagementSystem.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
-@RestController
+import java.util.Collections;
+
+@Controller
 @RequestMapping("/api/v1")
-@RequiredArgsConstructor
 public class AuthenticationController {
 
-    private final JwtUtils jwtUtils;
-    private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    public AuthenticationController(AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
-        this.authenticationManager = authenticationManager;
-        this.jwtUtils = jwtUtils;
+    public AuthenticationController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    @PostMapping("/auth")
-    public JwtResponseDto auth(@RequestBody
-                               JwtRequestDto requestDto) {
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
 
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(requestDto.getUsername(), requestDto.getPassword()));
+    @GetMapping("/register")
+    public String registerForm(Model model) {
+        model.addAttribute("user", new User());
+        return "register";
+    }
 
-        String token = jwtUtils.generateToken(requestDto.getUsername());
+    @PostMapping("/register")
+    public String registerSubmit(@ModelAttribute User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole(Collections.singleton(User.Role.ROLE_USER));
+        userRepository.save(user);
+        return "redirect:/login";
+    }
 
-        return new JwtResponseDto(token);
+    @GetMapping("/admin")
+    public String adminPage() {
+        return "admin";
     }
 }

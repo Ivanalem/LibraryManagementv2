@@ -1,18 +1,19 @@
 package com.academy.LibraryManagementSystem.model;
 
 
-import com.academy.LibraryManagementSystem.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -20,7 +21,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User implements UserDetails {
+public class User  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -29,19 +30,25 @@ public class User implements UserDetails {
     private String email;
     @Enumerated(EnumType.STRING)
     @ElementCollection(fetch = FetchType.EAGER)
-    private List<Role> role;
-    private Integer status;
+    private Set<Role> role;
+    @Column(nullable = false)
+    private String status;
+    @UpdateTimestamp
     @Column(name = "updated_at")
     private Timestamp updatedAt;
-    @Column(name = "created_at")
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
     private Timestamp createdAt;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-
-        role.forEach(role -> authorities.add(new SimpleGrantedAuthority(role.toString())));
-
-        return authorities;
+    public enum Role {
+        ROLE_USER,
+        ROLE_ADMIN
     }
+    @PrePersist
+    public void prePersist() {
+        if (status == null) {
+            status = "ACTIVE";
+        }
+    }
+
 }

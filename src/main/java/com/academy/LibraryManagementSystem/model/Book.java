@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -22,9 +24,11 @@ public class Book {
     private Integer publishedYear;
     @Column(name = "available_copies")
     private Integer availableCopies;
+    @UpdateTimestamp
     @Column(name = "updated_at")
     private Timestamp updatedAt;
-    @Column(name = "created_at")
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
     private Timestamp createdAt;
 
     @ManyToMany(mappedBy = "books")

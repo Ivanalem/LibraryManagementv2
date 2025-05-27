@@ -1,6 +1,5 @@
 package com.academy.LibraryManagementSystem.config;
 
-import com.academy.LibraryManagementSystem.filter.JwtFilter;
 import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -21,25 +20,26 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 @EnableWebSecurity
 public class SecurityConfiguration implements SecurityContext {
 
-    @Autowired
-    private JwtFilter jwtFilter;
-
 
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(authorizeRequests ->
-                        authorizeRequests
-                                .requestMatchers("/api/v1/index").anonymous()
-                                .requestMatchers("api/v1/auth").permitAll()
-                                .requestMatchers("/api/v1/users").hasAnyAuthority("ROLE_ADMIN",
-                                        "ROLE_USER")
-                                .anyRequest().authenticated()
+        http
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/v1/login", "/api/v1/register", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/index").anonymous()// важно!
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .anyRequest().authenticated()
                 )
-                .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtFilter,
-                        UsernamePasswordAuthenticationFilter.class);
+                .formLogin(form -> form
+                        .loginPage("/api/v1/login")
+                        .defaultSuccessUrl("/index", true)
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutSuccessUrl("/login?logout")
+                        .permitAll()
+                );
 
         return http.build();
     }

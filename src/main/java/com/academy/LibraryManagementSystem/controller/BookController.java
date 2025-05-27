@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/books")
+@RequestMapping("/api/v1")
 public class BookController {
 
     private final BookService bookService;
@@ -17,13 +17,13 @@ public class BookController {
         this.bookService = bookService;
     }
 
-    @GetMapping
+    @GetMapping("/books")
     public List<Book> findAllBooks() {
 
         return bookService.findAllBooks();
     }
 
-    @PostMapping("save_book")
+    @PostMapping("/save_book")
     public String saveBook(@RequestBody Book book) {
         bookService.saveBook(book);
         return "Book successfully saved";
