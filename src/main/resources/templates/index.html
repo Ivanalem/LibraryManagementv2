@@ -96,15 +96,16 @@
 <nav>
     <a th:href="@{/api/v1/login}">Войти</a>
     <a th:href="@{/api/v1/register}">Регистрация</a>
-    <a th:href="@{/logout}">Выйти</a>
+    <form th:action="@{/logout}" method="post">
+        <button class="btn btn-outline-light" type="submit">🚪 Выйти</button>
+    </form>
 </nav>
 <nav>
     <ul>
-        <li><a href="/home">Главная</a></li>
+        <li><a th:href="@{/api/v1/index}">Главная</a></li>
         <li th:if="${#authorization.expression('hasRole(''USER'')')}"><a href="/user/books">Мои книги</a></li>
         <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a href="/admin/add-book">Добавить книгу</a></li>
         <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a href="/admin/users">Пользователи</a></li>
-        <li><a href="/logout">Выход</a></li>
     </ul>
 </nav>
 <div th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
