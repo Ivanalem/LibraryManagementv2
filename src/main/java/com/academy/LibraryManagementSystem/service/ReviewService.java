@@ -4,6 +4,7 @@ import com.academy.LibraryManagementSystem.model.Review;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public interface ReviewService {
@@ -12,9 +13,13 @@ public interface ReviewService {
 
     Review saveReview(Review review);
 
-    Review findByRating(Integer rating);
+    List<Review> findByBookId(Integer bookId);
 
     Review updateReview(Review review);
 
-    void deleteByComment(String comment);
+    void deleteReview(Integer reviewId);
+
+    Optional<Review> getUserReviewForBook(Integer bookId, Integer userId);
+
+
 }

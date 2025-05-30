@@ -102,6 +102,12 @@
 <div class="search-bar">
     <form th:action="@{/search}" method="get" class="search-form">
         <input type="text" name="query" placeholder="Поиск по названию книги или автору..." required>
+        <select name="genre" class="select">
+            <option value="">Все жанры</option>
+            <th:block th:each="g : ${genres}">
+                <option th:value="${g}" th:text="${g}"></option>
+            </th:block>
+        </select>
         <button type="submit">🔍 Найти</button>
     </form>
 </div>

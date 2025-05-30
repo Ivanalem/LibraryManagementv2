@@ -6,6 +6,7 @@ import com.academy.LibraryManagementSystem.service.BookService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -18,6 +19,26 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
+    public List<Book> searchBooks(String query, String genre) {
+        if ((query == null || query.isEmpty()) && (genre == null || genre.isEmpty())) {
+            return bookRepository.findAll();
+        }
+
+        if (query != null && !query.isEmpty() && genre != null && !genre.isEmpty()) {
+            return bookRepository.findByTitleContainingIgnoreCaseAndGenreIgnoreCase(query, genre);
+        } else if (query != null && !query.isEmpty()) {
+            return bookRepository.findByTitleContainingIgnoreCase(query);
+        } else {
+            return bookRepository.findByGenreIgnoreCase(genre);
+        }
+    }
+
+    @Override
+    public List<String> findAllGenres() {
+        return bookRepository.findDistinctGenres();
+    }
+
+    @Override
     public List<Book> findAllBooks() {
         return bookRepository.findAll();
     }
@@ -28,9 +49,10 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book findByTitle(String title) {
-        return bookRepository.findByTitle(title);
+    public Optional<Book> findById(Integer id) {
+        return bookRepository.findById(id);
     }
+
 
     @Override
     public Book updateBook(Book book) {

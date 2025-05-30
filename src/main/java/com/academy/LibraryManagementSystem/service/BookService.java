@@ -4,16 +4,19 @@ import com.academy.LibraryManagementSystem.model.Book;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public interface BookService {
 
+    List<Book> searchBooks(String query, String genre);
+    List<String> findAllGenres();
 
     List<Book> findAllBooks();
 
     Book saveBook(Book book);
 
-    Book findByTitle(String title);
+    Optional<Book> findById(Integer id);
 
     Book updateBook(Book book);
 
