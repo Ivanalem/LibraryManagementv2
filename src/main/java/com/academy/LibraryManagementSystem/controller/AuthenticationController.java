@@ -26,6 +26,12 @@ public class AuthenticationController {
         return "login";
     }
 
+    @PostMapping("/login")
+    public String trueLogin() {
+        return "index";
+    }
+
+
     @GetMapping("/register")
     public String registerForm(Model model) {
         model.addAttribute("user", new User());
@@ -40,8 +46,4 @@ public class AuthenticationController {
         return "redirect:/login";
     }
 
-    @GetMapping("/admin")
-    public String adminPage() {
-        return "admin";
-    }
 }

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Book</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #fefae0;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        form {
+            max-width: 600px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            margin-top: 15px;
+            background-color: #6b705c;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #a5a58d;
+        }
+    </style>
+</head>
+<body>
+<h2>Add New Book</h2>
+<form th:action="@{/admin/add-book}" th:object="${book}" method="post">
+    <label>Title:
+        <input type="text" th:field="*{title}" required/>
+    </label>
+    <label>Author:
+        <input type="text" th:field="*{author}" required/>
+    </label>
+    <label>Description:
+        <textarea th:field="*{description}" rows="5"></textarea>
+    </label>
+    <label>ISBN:
+        <input type="text" th:field="*{isbn}" required/>
+    </label>
+    <button type="submit">Save Book</button>
+</form>
+</body>
+</html>

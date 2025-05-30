@@ -8,6 +8,7 @@ import java.util.List;
 @Service
 public interface BookService {
 
+
     List<Book> findAllBooks();
 
     Book saveBook(Book book);
@@ -16,5 +17,5 @@ public interface BookService {
 
     Book updateBook(Book book);
 
-    void deleteByTitle(String title);
+    void deleteById(Integer id);
 }

@@ -35,14 +35,17 @@ public class BookController {
         return bookService.findByTitle(title);
     }
 
-    @PutMapping("update_book")
+    @PutMapping("/update_book")
     public Book updateBook(@RequestBody Book book) {
         return bookService.updateBook(book);
     }
 
     @Transactional
-    @DeleteMapping("delete/{title}")
-    public void deleteByTitle(@PathVariable String title) {
-        bookService.deleteByTitle(title);
+    @DeleteMapping("/delete/{id}")
+    public void deleteById(@PathVariable Integer id) {
+        bookService.deleteById(id);
     }
+
+
+
 }

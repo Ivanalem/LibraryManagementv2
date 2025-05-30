@@ -100,11 +100,17 @@
 </nav>
 
 <div class="search-bar">
-    <form th:action="@{/search}" method="get" class="search-form">
-        <input type="text" name="query" placeholder="Поиск по названию книги или автору..." required>
-        <button type="submit">🔍 Найти</button>
+    <form th:action="@{/search}" method="get">
+        <input type="text" name="query" placeholder="Поиск по книгам, авторам...">
+        <button type="submit">Поиск</button>
     </form>
 </div>
+
+<div th:if="${searchQuery}">
+    <h2>Результаты поиска по запросу: "<span th:text="${searchQuery}">Поиск</span>"</h2>
+</div>
+
+
 
 <section class="categories">
     <div class="category">Фантастика</div>
