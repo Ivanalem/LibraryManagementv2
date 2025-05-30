@@ -98,6 +98,24 @@
     <a th:href="@{/api/v1/register}">Регистрация</a>
     <a th:href="@{/logout}">Выйти</a>
 </nav>
+<nav>
+    <ul>
+        <li><a href="/home">Главная</a></li>
+        <li th:if="${#authorization.expression('hasRole(''USER'')')}"><a href="/user/books">Мои книги</a></li>
+        <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a href="/admin/add-book">Добавить книгу</a></li>
+        <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a href="/admin/users">Пользователи</a></li>
+        <li><a href="/logout">Выход</a></li>
+    </ul>
+</nav>
+<div th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+    <h2>Добро пожаловать, Администратор!</h2>
+    <a href="/admin/dashboard">Перейти в админ-панель</a>
+</div>
+
+<div th:if="${#authorization.expression('hasRole(''USER'')')}">
+    <h2>Добро пожаловать, Читатель!</h2>
+    <p>Вы можете просматривать и брать книги</p>
+</div>
 
 <div class="search-bar">
     <form th:action="@{/search}" method="get" class="search-form">
