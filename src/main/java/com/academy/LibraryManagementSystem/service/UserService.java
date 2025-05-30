@@ -18,4 +18,6 @@ public interface UserService {
     User updateUser(User user);
 
     void deleteByEmail(String email);
+
+    void changeUserRole(Integer Id, User.Role newRole);
 }

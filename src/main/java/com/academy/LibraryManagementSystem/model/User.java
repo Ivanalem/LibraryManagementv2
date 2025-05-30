@@ -10,10 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @Entity
@@ -42,7 +39,8 @@ public class User  {
 
     public enum Role {
         ROLE_USER,
-        ROLE_ADMIN
+        ROLE_ADMIN,
+        ROLE_Librarian
     }
     @PrePersist
     public void prePersist() {

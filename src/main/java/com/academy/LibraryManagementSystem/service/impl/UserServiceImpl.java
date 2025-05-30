@@ -55,4 +55,11 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteByEmail(email);
     }
 
+    @Override
+    public void changeUserRole(Integer Id, User.Role newRole) {
+        User user = userRepository.findById(Id).orElseThrow();
+        user.setRole(Collections.singleton(newRole));
+        userRepository.save(user);
+    }
+
 }

@@ -40,7 +40,9 @@ public class SecurityConfiguration implements SecurityContext {
                         .logoutSuccessUrl("/login?logout")
                         .permitAll()
                 );
+
 */
+
         return http.build();
 
 

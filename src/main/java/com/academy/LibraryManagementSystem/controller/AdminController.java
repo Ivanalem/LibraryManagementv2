@@ -4,6 +4,7 @@ import com.academy.LibraryManagementSystem.model.Book;
 import com.academy.LibraryManagementSystem.model.User;
 import com.academy.LibraryManagementSystem.repository.UserRepository;
 import com.academy.LibraryManagementSystem.service.BookService;
+import com.academy.LibraryManagementSystem.service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,23 +17,26 @@ import java.util.Set;
 
 @Controller
 @RequestMapping("/api/v1/admin")
+//@PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
 
 
     private final BookService bookService;
     private final UserRepository userRepository;
+    private final UserService userService;
 
-    public AdminController(BookService bookService, UserRepository userRepository) {
+    public AdminController(BookService bookService, UserRepository userRepository, UserService userService) {
         this.bookService = bookService;
         this.userRepository = userRepository;
+        this.userService = userService;
     }
 
-
-    @GetMapping("/dashboard")
     @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/adminDashboard")
     public String adminDashboard() {
-        return "admin-dashboard";
+        return "adminDashboard";
     }
+
 
     @GetMapping("/save_book")
     public String addBookForm(Model model) {
@@ -62,6 +66,12 @@ public class AdminController {
     public String userList(Model model) {
         model.addAttribute("users", userRepository.findAll());
         return "users";
+    }
+
+    @PostMapping("/users/{id}/change-role")
+    public String changeUserRole(@PathVariable Integer id, @RequestParam User.Role newRole) {
+        userService.changeUserRole(id, newRole);
+        return "redirect:/admin/users";
     }
 
     @Bean
