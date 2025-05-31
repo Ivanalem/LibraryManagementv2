@@ -4,16 +4,20 @@ import com.academy.LibraryManagementSystem.model.User;
 import com.academy.LibraryManagementSystem.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
+import java.util.Collection;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/api/v1")
@@ -38,26 +42,26 @@ public class AuthenticationController {
     public String formLogin(@RequestParam String username,
                             @RequestParam String password,
                             Model model,
-                            HttpServletRequest request,
-                            HttpServletResponse response) {
+                            HttpServletRequest request) {
         try {
-            Authentication auth = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(username, password));
+            UsernamePasswordAuthenticationToken authToken =
+                    new UsernamePasswordAuthenticationToken(username, password);
 
-            // Успешная аутентификация
-            // Здесь можно добавить кастомную логику, если нужно
+            Authentication authentication = authenticationManager.authenticate(authToken);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            // Перенаправляем в зависимости от роли
-            if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ADMIN"))) {
+            // Перенаправляем на главную или в админку в зависимости от роли
+            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+
+            if (authorities.stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))) {
                 return "redirect:/api/v1/admin/adminDashboard";
             } else {
-                auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("USER"));
                 return "redirect:index";
             }
 
         } catch (AuthenticationException e) {
             model.addAttribute("error", "Неверное имя пользователя или пароль");
-            return "login";
+            return "login"; // Возврат на страницу логина с ошибкой
         }
     }
 
@@ -69,10 +73,14 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public String registerSubmit(@ModelAttribute User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole(Collections.singleton(User.Role.ROLE_USER));
-        userRepository.save(user);
+    public String registerSubmit(@ModelAttribute User user, Model model) {
+        try {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setRole(Set.of(User.Role.ROLE_USER));
+            userRepository.save(user);
+        }catch (DataIntegrityViolationException e) {
+        model.addAttribute("error", "Пользователь с таким email уже зарегистрирован.");
+        }
         return "redirect:/login";
     }
 

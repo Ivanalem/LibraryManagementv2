@@ -1,6 +1,5 @@
 package com.academy.LibraryManagementSystem.config;
 
-import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,19 +25,24 @@ public class SecurityConfiguration {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
-                        .requestMatchers("/", "/api/v1/login", "/api/v1/register", "/error").permitAll()
+                        .requestMatchers( "/api/v1/login", "/api/v1/register", "/error").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user/**").hasRole("USER")
                         .anyRequest().authenticated()
                 )
+                .formLogin(form -> form
+                        .loginPage("/api/v1/login")
+                        .defaultSuccessUrl("/api/v1/index", true) // перенаправление после успешного логина
+                        .failureUrl("/api/v1/login?error=true")
+                        .permitAll()
+                )
                 .logout(logout -> logout
-                        .logoutUrl("/logout") // URL, вызываемый при выходе
-                        .logoutSuccessUrl("/api/v1/login") // перенаправление после успешного выхода
-                        .invalidateHttpSession(true) // сбрасываем сессию
-                        .clearAuthentication(true) // очищаем авторизацию
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/api/v1/login?logout=true")
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
                         .permitAll()
                 );
-
         return http.build();
 
 

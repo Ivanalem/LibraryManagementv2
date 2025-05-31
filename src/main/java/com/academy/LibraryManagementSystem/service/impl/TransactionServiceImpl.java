@@ -7,9 +7,7 @@ import com.academy.LibraryManagementSystem.repository.BookRepository;
 import com.academy.LibraryManagementSystem.repository.TransactionRepository;
 import com.academy.LibraryManagementSystem.repository.UserRepository;
 import com.academy.LibraryManagementSystem.service.TransactionService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
