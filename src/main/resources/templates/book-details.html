@@ -14,7 +14,7 @@
         <a class="navbar-brand" href="/">📚 Библиотека</a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" th:href="@{/}">Главная</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/api/v1/index}">Главная</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/logout}">Выход</a></li>
             </ul>
         </div>
@@ -47,6 +47,11 @@
                         <form th:action="@{/books/borrow}" method="post" class="d-inline">
                             <input type="hidden" name="bookId" th:value="${book.id}"/>
                             <button type="submit" class="btn btn-primary">📥 Взять книгу</button>
+                        </form>
+                        <!-- Кнопка возврата книги, если у пользователя есть активная транзакция -->
+                        <form th:action="@{/transactions/return}" method="post">
+                            <input type="hidden" name="transactionId" th:value="${transaction.id}" />
+                            <button type="submit" class="btn btn-warning">🔄 Вернуть книгу</button>
                         </form>
 
                         <!-- Кнопка "Оставить отзыв" -->

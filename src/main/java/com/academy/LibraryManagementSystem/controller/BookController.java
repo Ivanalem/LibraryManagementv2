@@ -81,7 +81,7 @@ public class BookController {
             userReview.ifPresent(r -> model.addAttribute("userReview", r));
         }
 
-        return "book-detail";
+        return "book-details";
     }
 
 }

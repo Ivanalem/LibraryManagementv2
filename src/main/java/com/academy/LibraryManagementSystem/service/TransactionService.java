@@ -1,7 +1,9 @@
 package com.academy.LibraryManagementSystem.service;
 
+import com.academy.LibraryManagementSystem.model.Book;
 import com.academy.LibraryManagementSystem.model.Review;
 import com.academy.LibraryManagementSystem.model.Transaction;
+import com.academy.LibraryManagementSystem.model.User;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -17,4 +19,7 @@ public interface TransactionService {
     Transaction updateTransaction(Transaction transaction);
 
     void deleteByTransactionDate(Timestamp dueDate);
+
+    void borrowBook(Integer bookId, String username);
+    void returnBook(Integer transactionId);
 }
