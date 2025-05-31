@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.security.Principal;
 
 
-
 @Controller
 @RequestMapping("/api/v1")
 public class AppController {
@@ -19,6 +18,11 @@ public class AppController {
     public String homePage(Model model, Principal principal) {
         model.addAttribute("user", principal.getName());
         return "index";
+    }
+
+    @GetMapping("/403")
+    public String accessDenied() {
+        return "403"; // Покажет 403.html
     }
 
 }

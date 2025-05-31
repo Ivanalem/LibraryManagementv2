@@ -23,25 +23,21 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        /*
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/login", "/api/v1/register", "/css/**", "/js/**").permitAll()
-                        .requestMatchers("/api/v1/index").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/", "/api/v1/login", "/api/v1/register", "/error").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/user/**").hasRole("USER")
                         .anyRequest().authenticated()
                 )
-                .formLogin(form -> form
-                        .loginPage("/api/v1/login")
-                        .defaultSuccessUrl("/api/v1/index", true)
-                        .permitAll()
-                )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/login?logout")
+                        .logoutUrl("/logout") // URL, вызываемый при выходе
+                        .logoutSuccessUrl("/api/v1/login") // перенаправление после успешного выхода
+                        .invalidateHttpSession(true) // сбрасываем сессию
+                        .clearAuthentication(true) // очищаем авторизацию
                         .permitAll()
                 );
-
-*/
 
         return http.build();
 

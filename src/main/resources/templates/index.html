@@ -103,14 +103,14 @@
 <nav>
     <ul>
         <li><a th:href="@{/api/v1/index}">Главная</a></li>
-        <li th:if="${#authorization.expression('hasRole(''USER'')')}"><a href="/user/books">Мои книги</a></li>
-        <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a href="/admin/add-book">Добавить книгу</a></li>
-        <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a href="/admin/users">Пользователи</a></li>
+        <li th:if="${#authorization.expression('hasRole(''USER'')')}"><a href="api/v1/books">Мои книги</a></li>
+        <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a href="api/v1/admin/save_book">Добавить книгу</a></li>
+        <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a href="api/v1/admin/users">Пользователи</a></li>
     </ul>
 </nav>
 <div th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
     <h2>Добро пожаловать, Администратор!</h2>
-    <a href="/admin/dashboard">Перейти в админ-панель</a>
+    <a href="api/v1/admin/adminDashboard">Перейти в админ-панель</a>
 </div>
 
 <div th:if="${#authorization.expression('hasRole(''USER'')')}">
@@ -119,7 +119,7 @@
 </div>
 
 <div class="search-bar">
-    <form th:action="@{/search}" method="get" class="search-form">
+    <form th:action="@{api/v1/search}" method="get" class="search-form">
         <input type="text" name="query" placeholder="Поиск по названию книги или автору..." required>
         <select name="genre" class="select">
             <option value="">Все жанры</option>
