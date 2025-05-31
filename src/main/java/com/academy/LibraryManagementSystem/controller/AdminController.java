@@ -17,7 +17,6 @@ import java.util.Set;
 
 @Controller
 @RequestMapping("/api/v1/admin")
-//@PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
 
 
@@ -59,7 +58,7 @@ public class AdminController {
     @GetMapping("/books/delete/{id}")
     public String deleteBook(@PathVariable Integer id) {
         bookService.deleteById(id);
-        return "redirect:/admin/books";
+        return "redirect:/books";
     }
 
     @GetMapping("/users")
@@ -71,7 +70,7 @@ public class AdminController {
     @PostMapping("/users/{id}/change-role")
     public String changeUserRole(@PathVariable Integer id, @RequestParam User.Role newRole) {
         userService.changeUserRole(id, newRole);
-        return "redirect:/admin/users";
+        return "redirect:/admin-users";
     }
 
     @Bean

@@ -38,7 +38,7 @@ public class SecurityConfiguration {
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/api/v1/login?logout=true")
+                        .logoutSuccessUrl("/api/v1/login")
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
                         .permitAll()

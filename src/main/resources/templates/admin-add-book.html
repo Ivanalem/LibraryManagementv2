@@ -54,16 +54,19 @@
 <h2>Add New Book</h2>
 <form th:action="@{/admin/add-book}" th:object="${book}" method="post">
     <label>Title:
-        <input type="text" th:field="*{title}" required/>
+        <input type="text" th:field="${title}" required/>
     </label>
     <label>Author:
-        <input type="text" th:field="*{author}" required/>
+        <input type="text" th:field="${author}" required/>
     </label>
     <label>Description:
         <textarea th:field="*{description}" rows="5"></textarea>
     </label>
-    <label>ISBN:
-        <input type="text" th:field="*{isbn}" required/>
+    <label>PublishedYear:
+        <input type="text" th:field="${publishedYear}" required/>
+    </label>
+    <label>Genre:
+        <input type="text" th:field="${genre}" required/>
     </label>
     <button type="submit">Save Book</button>
 </form>

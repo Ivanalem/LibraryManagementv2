@@ -1,7 +1,6 @@
 package com.academy.LibraryManagementSystem.controller;
 
 import com.academy.LibraryManagementSystem.model.Author;
-import com.academy.LibraryManagementSystem.model.User;
 import com.academy.LibraryManagementSystem.service.AuthorService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;

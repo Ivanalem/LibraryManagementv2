@@ -30,7 +30,8 @@ public class Book {
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private Timestamp createdAt;
-
+    @Column(name="description")
+    private String description;
     @ManyToMany(mappedBy = "books")
     private List<Author> authors;
 }
