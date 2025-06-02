@@ -1,8 +1,10 @@
 package com.academy.LibraryManagementSystem.controller;
 
+import com.academy.LibraryManagementSystem.model.Author;
 import com.academy.LibraryManagementSystem.model.Book;
 import com.academy.LibraryManagementSystem.model.Review;
 import com.academy.LibraryManagementSystem.model.User;
+import com.academy.LibraryManagementSystem.repository.BookRepository;
 import com.academy.LibraryManagementSystem.service.BookService;
 import com.academy.LibraryManagementSystem.service.ReviewService;
 import com.academy.LibraryManagementSystem.service.UserService;
@@ -13,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,8 +26,9 @@ public class BookController {
     private final BookService bookService;
     private final UserService userService;
     private final ReviewService reviewService;
+
     @Autowired
-    public BookController(BookService bookService, UserService userService, ReviewService reviewService) {
+    public BookController(BookService bookService, UserService userService, ReviewService reviewService, BookRepository bookRepository) {
         this.bookService = bookService;
         this.userService = userService;
         this.reviewService = reviewService;
@@ -37,12 +41,48 @@ public class BookController {
     }
 
     @PostMapping("/save_book")
-    public String saveBook(@RequestBody Book book) {
-        bookService.saveBook(book);
-        return "Book successfully saved";
+    @Transactional
+    public String saveBook(@RequestParam String title,
+                           @RequestParam String description,
+                           @RequestParam Integer publishedYear,
+                           @RequestParam String genre,
+                           @RequestParam Integer availableCopies,
+                           @RequestParam List<String> authorNames,
+                           @RequestParam(required = false) List<String> authorBios) {
+
+        Book book = new Book();
+        book.setTitle(title);
+        book.setDescription(description);
+        book.setPublishedYear(publishedYear);
+        book.setGenre(genre);
+        book.setAvailableCopies(availableCopies);
+
+        List<Author> authors = new ArrayList<>();
+        for (int i = 0; i < authorNames.size(); i++) {
+            Author author = new Author();
+            author.setName(authorNames.get(i));
+            if (authorBios != null && i < authorBios.size()) {
+                author.setBiography(authorBios.get(i));
+            }
+            author.getBooks().add(book); // связь
+            authors.add(author);
+        }
+
+        book.setAuthors(authors); // связь
+
+        bookService.saveBookWithAuthors(book, authors);
+
+        return "books";
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/save_book")
+    public String saveForm(Book book, Model model) {
+        bookService.saveBook(book);
+        model.addAttribute("book", new Book());
+        return "books";
+    }
+
+    @GetMapping("/books/{id}")
     public Optional<Book> findById(@PathVariable Integer id) {
 
         return bookService.findById(id);
@@ -69,7 +109,7 @@ public class BookController {
         model.addAttribute("genres", bookService.findAllGenres());
         return "index";
     }
-    @GetMapping("/books/{id}")
+    @GetMapping("/book/{id}")
     public String bookDetails(@PathVariable Integer id, Model model, Principal principal) {
         Book book = bookService.findAllBooks().get(id);
         model.addAttribute("book", book);

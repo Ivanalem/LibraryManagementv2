@@ -1,6 +1,8 @@
 package com.academy.LibraryManagementSystem.service.impl;
 
+import com.academy.LibraryManagementSystem.model.Author;
 import com.academy.LibraryManagementSystem.model.Book;
+import com.academy.LibraryManagementSystem.repository.AuthorRepository;
 import com.academy.LibraryManagementSystem.repository.BookRepository;
 import com.academy.LibraryManagementSystem.service.BookService;
 import org.springframework.stereotype.Service;
@@ -12,9 +14,11 @@ import java.util.Optional;
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
+    private final AuthorRepository authorRepository;
 
-    public BookServiceImpl(BookRepository bookRepository) {
+    public BookServiceImpl(BookRepository bookRepository, AuthorRepository authorRepository) {
         this.bookRepository = bookRepository;
+        this.authorRepository = authorRepository;
     }
 
 
@@ -62,5 +66,12 @@ public class BookServiceImpl implements BookService {
     @Override
     public void deleteById(Integer id) {
         bookRepository.deleteById(id);
+    }
+
+    @Override
+    public void saveBookWithAuthors(Book book, List<Author> authors) {
+        authorRepository.saveAll(authors);
+        bookRepository.save(book);
+
     }
 }

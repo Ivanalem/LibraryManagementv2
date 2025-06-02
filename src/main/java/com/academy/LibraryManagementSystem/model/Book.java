@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -17,6 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Book {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String title;
     private String genre;
@@ -33,5 +35,5 @@ public class Book {
     @Column(name="description")
     private String description;
     @ManyToMany(mappedBy = "books")
-    private List<Author> authors;
+    private List<Author> authors = new ArrayList<>();
 }

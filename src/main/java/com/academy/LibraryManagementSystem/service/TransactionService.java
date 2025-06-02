@@ -22,4 +22,6 @@ public interface TransactionService {
 
     void borrowBook(Integer bookId, String username);
     void returnBook(Integer transactionId);
+
+    List<Transaction> findByUser(User user);
 }

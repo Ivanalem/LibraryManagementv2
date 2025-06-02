@@ -8,10 +8,7 @@ import com.academy.LibraryManagementSystem.repository.TransactionRepository;
 import com.academy.LibraryManagementSystem.repository.UserRepository;
 import com.academy.LibraryManagementSystem.service.TransactionService;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 
-import java.security.Principal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -110,11 +107,9 @@ public class TransactionServiceImpl implements TransactionService {
             throw new RuntimeException("Транзакция не найдена.");
         }
     }
-    @GetMapping("/transactions")
-    public String userTransactions(Model model, Principal principal) {
-        User user = userRepository.findByUsername(principal.getName()).orElseThrow();
-        List<Transaction> transactions = transactionRepository.findByUser(user);
-        model.addAttribute("transactions", transactions);
-        return "transactions";
+
+    @Override
+    public List<Transaction> findByUser(User user) {
+        return transactionRepository.findByUser(user);
     }
     }

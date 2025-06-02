@@ -1,18 +1,20 @@
 package com.academy.LibraryManagementSystem.controller;
 
 import com.academy.LibraryManagementSystem.model.Book;
+import com.academy.LibraryManagementSystem.model.Transaction;
 import com.academy.LibraryManagementSystem.model.User;
 import com.academy.LibraryManagementSystem.repository.UserRepository;
 import com.academy.LibraryManagementSystem.service.BookService;
+import com.academy.LibraryManagementSystem.service.TransactionService;
 import com.academy.LibraryManagementSystem.service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -23,30 +25,35 @@ public class AdminController {
     private final BookService bookService;
     private final UserRepository userRepository;
     private final UserService userService;
+    private final TransactionService transactionService;
 
-    public AdminController(BookService bookService, UserRepository userRepository, UserService userService) {
+    public AdminController(BookService bookService, UserRepository userRepository, UserService userService, TransactionService transactionService) {
         this.bookService = bookService;
         this.userRepository = userRepository;
         this.userService = userService;
+        this.transactionService = transactionService;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/adminDashboard")
-    public String adminDashboard() {
-        return "adminDashboard";
+
+    @GetMapping("/transaction")
+    public String adminTransaction(Model model) {
+        List<Transaction> transactions = transactionService.findAllTransactions();
+        model.addAttribute("transactions", transactions);
+        return "transactions";
     }
+
 
 
     @GetMapping("/save_book")
     public String addBookForm(Model model) {
         model.addAttribute("book", new Book());
-        return "add-book";
+        return "admin-add-book";
     }
 
     @PostMapping("/save_book")
     public String saveBook(@ModelAttribute Book book) {
         bookService.saveBook(book);
-        return "redirect:/admin/books";
+        return "redirect:/books";
     }
 
     @GetMapping("/books")
@@ -64,7 +71,7 @@ public class AdminController {
     @GetMapping("/users")
     public String userList(Model model) {
         model.addAttribute("users", userRepository.findAll());
-        return "users";
+        return "admin-users";
     }
 
     @PostMapping("/users/{id}/change-role")

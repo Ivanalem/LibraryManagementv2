@@ -1,10 +1,10 @@
 package com.academy.LibraryManagementSystem.service;
 
 import com.academy.LibraryManagementSystem.model.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public interface UserService {
@@ -20,4 +20,6 @@ public interface UserService {
     void deleteByEmail(String email);
 
     void changeUserRole(Integer Id, User.Role newRole);
+
+    Optional<User> findByUsername(String username);
 }

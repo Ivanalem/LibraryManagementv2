@@ -3,7 +3,6 @@ package com.academy.LibraryManagementSystem.controller;
 import com.academy.LibraryManagementSystem.model.User;
 import com.academy.LibraryManagementSystem.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -54,14 +53,14 @@ public class AuthenticationController {
             Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
             if (authorities.stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))) {
-                return "redirect:/api/v1/admin/adminDashboard";
+                return "redirect:dashboard";
             } else {
                 return "redirect:index";
             }
 
         } catch (AuthenticationException e) {
             model.addAttribute("error", "Неверное имя пользователя или пароль");
-            return "login"; // Возврат на страницу логина с ошибкой
+            return "/login"; // Возврат на страницу логина с ошибкой
         }
     }
 

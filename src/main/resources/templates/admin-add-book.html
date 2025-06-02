@@ -1,74 +1,155 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Add Book</title>
+    <title>Добавить книгу</title>
     <style>
         body {
             font-family: 'Georgia', serif;
-            background-color: #fefae0;
-            padding: 20px;
+            background-color: #f4f1ea;
+            padding: 40px;
+            color: #2d2d2d;
         }
 
         h2 {
-            color: #333;
+            text-align: center;
+            color: #4a4e69;
+            margin-bottom: 30px;
         }
 
         form {
-            max-width: 600px;
-            margin: auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+            max-width: 700px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
         }
 
         label {
             display: block;
-            margin-top: 10px;
+            margin-top: 15px;
+            font-weight: bold;
         }
 
-        input, textarea {
+        input[type="text"],
+        input[type="number"],
+        textarea {
             width: 100%;
-            padding: 8px;
+            padding: 10px;
             margin-top: 5px;
-            border-radius: 5px;
+            border-radius: 6px;
             border: 1px solid #ccc;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .author-block {
+            background-color: #fdf6e3;
+            padding: 15px;
+            margin-top: 15px;
+            border-left: 4px solid #c9ada7;
+            border-radius: 6px;
+            position: relative;
+        }
+
+        .remove-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #c94c4c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
         }
 
         button {
-            margin-top: 15px;
-            background-color: #6b705c;
+            margin-top: 20px;
+            background-color: #4a4e69;
             color: white;
-            padding: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
+            cursor: pointer;
         }
 
         button:hover {
+            background-color: #9a8c98;
+        }
+
+        .add-author-btn {
+            background-color: #6b705c;
+        }
+
+        .add-author-btn:hover {
             background-color: #a5a58d;
         }
     </style>
 </head>
 <body>
-<h2>Add New Book</h2>
-<form th:action="@{/admin/add-book}" th:object="${book}" method="post">
-    <label>Title:
-        <input type="text" th:field="${title}" required/>
+<h2>Добавить новую книгу</h2>
+
+<form th:action="@{/api/v1/save_book}" method="post">
+    <label>Название:
+        <input type="text" name="title" required />
     </label>
-    <label>Author:
-        <input type="text" th:field="${author}" required/>
+
+    <label>Описание:
+        <textarea name="description" rows="4"></textarea>
     </label>
-    <label>Description:
-        <textarea th:field="*{description}" rows="5"></textarea>
+
+    <label>Год публикации:
+        <input type="number" name="publishedYear" required />
     </label>
-    <label>PublishedYear:
-        <input type="text" th:field="${publishedYear}" required/>
+
+    <label>Жанр:
+        <input type="text" name="genre" required />
     </label>
-    <label>Genre:
-        <input type="text" th:field="${genre}" required/>
+
+    <label>Доступные экземпляры:
+        <input type="number" name="availableCopies" required />
     </label>
-    <button type="submit">Save Book</button>
+
+    <div id="authorFields">
+        <h3>Авторы</h3>
+        <div class="author-block">
+            <label>Имя:
+                <input type="text" name="authorNames" required />
+            </label>
+            <label>Биография:
+                <textarea name="authorBios" rows="2"></textarea>
+            </label>
+        </div>
+    </div>
+
+    <button type="button" class="add-author-btn" onclick="addAuthor()">+ Добавить автора</button>
+    <button type="submit">Сохранить книгу</button>
 </form>
+
+<script>
+    function addAuthor() {
+        const container = document.getElementById("authorFields");
+        const block = document.createElement("div");
+        block.classList.add("author-block");
+        block.innerHTML = `
+            <button type="button" class="remove-btn" onclick="removeAuthor(this)">Удалить</button>
+            <label>Имя:
+                <input type="text" name="authorNames" required />
+            </label>
+            <label>Биография:
+                <textarea name="authorBios" rows="2"></textarea>
+            </label>
+        `;
+        container.appendChild(block);
+    }
+
+    function removeAuthor(button) {
+        const block = button.parentElement;
+        block.remove();
+    }
+</script>
 </body>
 </html>

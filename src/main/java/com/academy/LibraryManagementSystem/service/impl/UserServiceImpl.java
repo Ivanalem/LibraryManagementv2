@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 
 @Primary
@@ -59,6 +60,11 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(Id).orElseThrow();
         user.setRole(Collections.singleton(newRole));
         userRepository.save(user);
+    }
+
+    @Override
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
 }

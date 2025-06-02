@@ -1,5 +1,6 @@
 package com.academy.LibraryManagementSystem.service;
 
+import com.academy.LibraryManagementSystem.model.Author;
 import com.academy.LibraryManagementSystem.model.Book;
 import org.springframework.stereotype.Service;
 
@@ -21,4 +22,6 @@ public interface BookService {
     Book updateBook(Book book);
 
     void deleteById(Integer id);
+    void saveBookWithAuthors(Book book, List<Author> authors);
+
 }
