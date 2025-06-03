@@ -23,7 +23,7 @@ public class UserController {
         return userService.findAllUsers();
     }
 
-    @PostMapping("save_user")
+    @PostMapping("/save_user")
     public String saveUser(@RequestBody User user) {
         userService.saveUser(user);
         return "User successfully saved";
@@ -34,13 +34,13 @@ public class UserController {
         return userService.findByEmail(email);
     }
 
-    @PutMapping("update_user")
+    @PutMapping("/update_user")
     public User updateUser(@RequestBody User user) {
         return userService.updateUser(user);
     }
 
     @Transactional
-    @DeleteMapping("delete_user/{email}")
+    @PostMapping("/delete_user/{email}")
     public void deleteUser(@PathVariable String email) {
         userService.deleteByEmail(email);
     }

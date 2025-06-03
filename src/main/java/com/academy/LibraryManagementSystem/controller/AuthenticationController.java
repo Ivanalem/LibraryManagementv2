@@ -53,14 +53,14 @@ public class AuthenticationController {
             Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
             if (authorities.stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))) {
-                return "redirect:dashboard";
+                return "redirect:admin-users";
             } else {
                 return "redirect:index";
             }
 
         } catch (AuthenticationException e) {
             model.addAttribute("error", "Неверное имя пользователя или пароль");
-            return "/login"; // Возврат на страницу логина с ошибкой
+            return "login"; // Возврат на страницу логина с ошибкой
         }
     }
 

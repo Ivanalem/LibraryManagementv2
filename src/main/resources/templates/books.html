@@ -1,144 +1,48 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Каталог книг</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <style>
-        body {
-            font-family: 'Georgia', serif;
-            margin: 0;
-            background-color: #f8f4ec;
-        }
-
-        header {
-            background-color: #5c4433;
-            color: white;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        header h1 {
-            margin: 0;
-        }
-
-        .nav-buttons a {
-            color: white;
-            text-decoration: none;
-            margin-left: 15px;
-            font-weight: bold;
-        }
-
-        .nav-buttons a:hover {
-            text-decoration: underline;
-        }
-
-        main {
-            padding: 40px;
-        }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 30px;
-            color: #4a3527;
-        }
-
-        .book-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-        }
-
-        .book-card {
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-
-        .book-card h3 {
-            margin-top: 10px;
-            font-size: 20px;
-            color: #3a2a1b;
-        }
-
-        .book-card p {
-            margin: 5px 0;
-            font-size: 14px;
-            color: #6a5d4d;
-        }
-
-        .book-card .rating {
-            margin-top: 10px;
-            font-weight: bold;
-            color: #b58900;
-        }
-
-        .book-card button {
-            margin-top: 15px;
-            padding: 8px 12px;
-            border: none;
-            background-color: #5c4433;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .book-card button:hover {
-            background-color: #3e2f24;
-        }
-
-        footer {
-            margin-top: 50px;
-            background-color: #e7dccc;
-            text-align: center;
-            padding: 15px;
-            font-size: 14px;
-            color: #4a3b2a;
-        }
-    </style>
 </head>
 <body>
-
-<header>
-    <h1>📚 Каталог книг</h1>
-    <div class="nav-buttons">
-        <a th:href="@{/api/v1/index}" sec:authorize="isAuthenticated()">Главная</a>
+<header class="bg-dark text-white p-3">
+    <div class="container">
+        <h1>📚 Каталог книг</h1>
+        <a th:href="@{/}" class="text-white">На главную</a>
     </div>
 </header>
 
-<main>
+<main class="container mt-5">
     <h2>Все книги</h2>
 
-    <div class="book-grid">
-        <div th:each="book : ${books}" class="book-card">
-            <h3 th:text="*{book.title}">Название книги</h3>
-            <p><strong>Автор:</strong>
-                <span th:if="*{book.authors != null and !book.authors.isEmpty()}">
-      <span th:each="author,iter : ${book.authors}">
-         <span th:text="*{author.name}"></span>
-         <span th:unless="*{iter.last}">, </span>
-      </span>
-   </span>
-                <span th:unless="${book.authors != null and !book.authors.isEmpty()}">Не указан</span>
-            </p>
-            <p><strong>Жанр:</strong> <span th:text="*{book.genre}">Жанр</span></p>
-            <p><strong>Год:</strong> <span th:text="*{book.publishedYear}">Год</span></p>
-            <p class="rating">⭐ <span th:text="${book.averageRating != null ? book.averageRating : 'Нет отзывов'}"></span></p>
-            <button th:onclick="'location.href=\'/books/' + *{book.id} + '\'">Подробнее</button>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col" th:each="book : ${books}">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${book.title}">Название книги</h5>
+                    <p class="card-text">
+                        <strong>Автор:</strong>
+                        <span th:if="${book.authors != null and !book.authors.isEmpty()}">
+                            <span th:each="author,iter : ${book.authors}">
+                                <span th:text="${author.name}"></span><span th:if="${!iter.last}">, </span>
+                            </span>
+                        </span>
+                        <span th:unless="${book.authors != null and !book.authors.isEmpty()}">Не указан</span>
+                    </p>
+                    <p><strong>Жанр:</strong> <span th:text="${book.genre}">Жанр</span></p>
+                    <p><strong>Год:</strong> <span th:text="${book.publishedYear}">Год</span></p>
+                </div>
+                <div class="card-footer text-center">
+                    <a th:href="@{/api/v1/book/{id}(id=${book.id})}" class="btn btn-primary">Подробнее</a>
+                </div>
+            </div>
         </div>
     </div>
 </main>
 
-<footer>
-    &copy; 2025 Библиотека. Все права защищены.
+<footer class="text-center mt-5 mb-3 text-muted">
+    &copy; 2025 Библиотека
 </footer>
-
 </body>
 </html>

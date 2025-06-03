@@ -34,12 +34,6 @@ public class BookController {
         this.reviewService = reviewService;
     }
 
-    @GetMapping("/books")
-    public List<Book> findAllBooks() {
-
-        return bookService.findAllBooks();
-    }
-
     @PostMapping("/save_book")
     @Transactional
     public String saveBook(@RequestParam String title,
@@ -61,24 +55,31 @@ public class BookController {
         for (int i = 0; i < authorNames.size(); i++) {
             Author author = new Author();
             author.setName(authorNames.get(i));
+
             if (authorBios != null && i < authorBios.size()) {
                 author.setBiography(authorBios.get(i));
             }
-            author.getBooks().add(book); // связь
+
+            // Инициализация списка книг вручную
+            List<Book> authoredBooks = new ArrayList<>();
+            authoredBooks.add(book);
+            author.setBooks(authoredBooks);
+
             authors.add(author);
         }
+
 
         book.setAuthors(authors); // связь
 
         bookService.saveBookWithAuthors(book, authors);
 
-        return "books";
+        return "redirect:/api/v1/books";
     }
 
     @GetMapping("/save_book")
     public String saveForm(Book book, Model model) {
         bookService.saveBook(book);
-        model.addAttribute("book", new Book());
+        model.addAttribute("books", new Book());
         return "books";
     }
 
@@ -109,19 +110,32 @@ public class BookController {
         model.addAttribute("genres", bookService.findAllGenres());
         return "index";
     }
+
     @GetMapping("/book/{id}")
     public String bookDetails(@PathVariable Integer id, Model model, Principal principal) {
-        Book book = bookService.findAllBooks().get(id);
+        Optional<Book> optionalBook = bookService.findById(id);
+
+        Book book = optionalBook.get();
         model.addAttribute("book", book);
         model.addAttribute("reviews", reviewService.findByBookId(id));
 
         if (principal != null) {
             User user = userService.findByEmail(principal.getName());
-            Optional<Review> userReview = reviewService.getUserReviewForBook(id, user.getId());
-            userReview.ifPresent(r -> model.addAttribute("userReview", r));
+            if (user != null) {
+                Optional<Review> userReview = reviewService.getUserReviewForBook(id, user.getId());
+                userReview.ifPresent(r -> model.addAttribute("userReview", r));
+            }
         }
 
         return "book-details";
+    }
+
+
+    @GetMapping("/books")
+    public String viewAllBooks(Model model) {
+        List<Book> books = bookService.findAllBooks(); // метод сервиса, получающий все книги
+        model.addAttribute("books", books);
+        return "books";
     }
 
 }

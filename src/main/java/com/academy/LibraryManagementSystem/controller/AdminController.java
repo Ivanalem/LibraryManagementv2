@@ -11,6 +11,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,13 +24,11 @@ public class AdminController {
 
 
     private final BookService bookService;
-    private final UserRepository userRepository;
     private final UserService userService;
     private final TransactionService transactionService;
 
     public AdminController(BookService bookService, UserRepository userRepository, UserService userService, TransactionService transactionService) {
         this.bookService = bookService;
-        this.userRepository = userRepository;
         this.userService = userService;
         this.transactionService = transactionService;
     }
@@ -53,7 +52,7 @@ public class AdminController {
     @PostMapping("/save_book")
     public String saveBook(@ModelAttribute Book book) {
         bookService.saveBook(book);
-        return "redirect:/books";
+        return "redirect:/api/v1/books";
     }
 
     @GetMapping("/books")
@@ -65,13 +64,18 @@ public class AdminController {
     @GetMapping("/books/delete/{id}")
     public String deleteBook(@PathVariable Integer id) {
         bookService.deleteById(id);
-        return "redirect:/books";
+        return "redirect:/admin-users";
     }
 
     @GetMapping("/users")
     public String userList(Model model) {
-        model.addAttribute("users", userRepository.findAll());
-        return "admin-users";
+            List<User> users = userService.findAllUsers();
+            List<String> roles = List.of("USER", "ADMIN"); // или откуда берёте
+
+            model.addAttribute("users", users);
+            model.addAttribute("roles", roles);
+            return "admin-users";
+
     }
 
     @PostMapping("/users/{id}/change-role")
@@ -93,5 +97,11 @@ public class AdminController {
                 userRepository.save(admin);
             }
         };
+    }
+    @Transactional
+    @PostMapping("/delete_user/{email}")
+    public String deleteUser(@PathVariable String email) {
+        userService.deleteByEmail(email);
+        return "redirect:/admin-users";
     }
 }

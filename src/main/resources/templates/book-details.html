@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title th:text="${book.title} + ' | Детали книги'">Детали книги</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/style.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <body class="bg-light">
@@ -15,7 +15,6 @@
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item"><a class="nav-link" th:href="@{/api/v1/index}">Главная</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/logout}">Выход</a></li>
             </ul>
         </div>
     </div>
@@ -32,14 +31,16 @@
                 <div class="card-body">
                     <h3 class="card-title" th:text="${book.title}">Название книги</h3>
                     <p class="card-text"><strong>Жанр:</strong> <span th:text="${book.genre}">Жанр</span></p>
-                    <p class="card-text"><strong>Год публикации:</strong> <span th:text="${book.publishedYear}">2023</span></p>
-                    <p class="card-text"><strong>Доступные копии:</strong> <span th:text="${book.availableCopies}">5</span></p>
+                    <p class="card-text"><strong>Год публикации:</strong> <span
+                            th:text="${book.publishedYear}">2023</span></p>
+                    <p class="card-text"><strong>Доступные копии:</strong> <span
+                            th:text="${book.availableCopies}">5</span></p>
 
                     <p class="card-text">
                         <strong>Авторы:</strong>
-                        <span th:each="author : ${book.authors}">
-                            <span th:text="${author.name}">Имя Автора</span><span th:if="${!${authorStat.last}}">, </span>
-                        </span>
+                        <span th:each="author, authorStat : ${book.authors}">
+    <span th:text="${author.name}">Имя Автора</span><span th:if="${!authorStat.last}">, </span>
+</span>
                     </p>
 
                     <div class="mt-4">
@@ -49,13 +50,14 @@
                             <button type="submit" class="btn btn-primary">📥 Взять книгу</button>
                         </form>
                         <!-- Кнопка возврата книги, если у пользователя есть активная транзакция -->
-                        <form th:action="@{/transactions/return}" method="post">
+                        <form th:if="${transaction != null}" th:action="@{/transactions/return}" method="post">
                             <input type="hidden" name="transactionId" th:value="${transaction.id}" />
                             <button type="submit" class="btn btn-warning">🔄 Вернуть книгу</button>
                         </form>
 
                         <!-- Кнопка "Оставить отзыв" -->
-                        <a th:href="@{/reviews/add(bookId=${book.id})}" class="btn btn-secondary ms-2">💬 Оставить отзыв</a>
+                        <a th:href="@{/reviews/add(bookId=${book.id})}" class="btn btn-secondary ms-2">💬 Оставить
+                            отзыв</a>
 
                     </div>
                 </div>
@@ -76,7 +78,8 @@
                     <strong>Оценка:</strong> <span th:text="${review.rating}">5</span>/5
                 </p>
                 <p class="card-text" th:text="${review.comment}">Комментарий</p>
-                <p class="card-text"><small class="text-muted" th:text="${#dates.format(review.createdAt, 'dd.MM.yyyy')}">Дата</small></p>
+                <p class="card-text"><small class="text-muted"
+                                            th:text="${#dates.format(review.createdAt, 'dd.MM.yyyy')}">Дата</small></p>
             </div>
         </div>
     </div>

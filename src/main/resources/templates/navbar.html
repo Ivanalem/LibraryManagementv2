@@ -1,0 +1,11 @@
+<!-- templates/fragments/navbar.html -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" th:fragment="navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">📚 Библиотека</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" th:href="@{/api/v1/index}">Главная</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>

@@ -110,7 +110,7 @@
     <h2>Добро пожаловать, Администратор!</h2>
     <ul>
     <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a th:href="@{/api/v1/admin/save_book}">Добавить книгу</a></li>
-    <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a th:href="@{/api/v1/transactions}">Пользователи</a></li>
+    <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a th:href="@{/api/v1/admin/users}">Пользователи</a></li>
     <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a th:href="@{/api/v1/admin/transaction}">Мои операции</a></li>
     </ul>
 </div>
@@ -128,12 +128,12 @@
 </div>
 
 <section class="categories">
+    <div class="category"> <a th:href="@{/api/v1/books}">Каталог</a> </div>
     <div class="category">Фантастика</div>
     <div class="category">История</div>
     <div class="category">Научная литература</div>
     <div class="category">Детективы</div>
     <div class="category">Классика</div>
-    <div class="category">Биографии</div>
 </section>
 
 <footer>
