@@ -137,5 +137,12 @@ public class BookController {
         model.addAttribute("books", books);
         return "books";
     }
+    @GetMapping("/genre/{genre}")
+    public String getBooksByGenre(@PathVariable String genre, Model model) {
+        List<Book> booksByGenre = bookService.findByGenre(genre);
+        model.addAttribute("books", booksByGenre);
+        model.addAttribute("selectedGenre", genre);
+        return "book-list"; // шаблон со списком книг
+    }
 
 }

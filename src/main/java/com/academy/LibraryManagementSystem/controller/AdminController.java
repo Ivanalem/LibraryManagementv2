@@ -42,7 +42,6 @@ public class AdminController {
     }
 
 
-
     @GetMapping("/save_book")
     public String addBookForm(Model model) {
         model.addAttribute("book", new Book());
@@ -69,12 +68,12 @@ public class AdminController {
 
     @GetMapping("/users")
     public String userList(Model model) {
-            List<User> users = userService.findAllUsers();
-            List<String> roles = List.of("USER", "ADMIN"); // или откуда берёте
+        List<User> users = userService.findAllUsers();
+        List<String> roles = List.of("USER", "ADMIN"); // или откуда берёте
 
-            model.addAttribute("users", users);
-            model.addAttribute("roles", roles);
-            return "admin-users";
+        model.addAttribute("users", users);
+        model.addAttribute("roles", roles);
+        return "admin-users";
 
     }
 
@@ -98,10 +97,11 @@ public class AdminController {
             }
         };
     }
+
     @Transactional
     @PostMapping("/delete_user/{email}")
     public String deleteUser(@PathVariable String email) {
         userService.deleteByEmail(email);
-        return "redirect:/admin-users";
+        return "redirect:/api/v1/admin/users";
     }
 }

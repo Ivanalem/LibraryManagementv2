@@ -22,4 +22,5 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
 
     @Query("SELECT DISTINCT b.genre FROM Book b WHERE b.genre IS NOT NULL")
     List<String> findDistinctGenres();
+    List<Book> findByGenre(String genre);
 }

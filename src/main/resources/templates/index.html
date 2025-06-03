@@ -129,11 +129,11 @@
 
 <section class="categories">
     <div class="category"> <a th:href="@{/api/v1/books}">Каталог</a> </div>
-    <div class="category">Фантастика</div>
-    <div class="category">История</div>
-    <div class="category">Научная литература</div>
-    <div class="category">Детективы</div>
-    <div class="category">Классика</div>
+    <a class="category" th:href="@{/api/v1/genre/{genre}(genre='Фантастика')}">Фантастика</a>
+    <a class="category" th:href="@{/api/v1/genre/{genre}(genre='История')}">История</a>
+    <a class="category" th:href="@{/api/v1/genre/{genre}(genre='Научная литература')}">Научная литература</a>
+    <a class="category" th:href="@{/api/v1/genre/{genre}(genre='Детективы')}">Детективы</a>
+    <a class="category" th:href="@{/api/v1/genre/{genre}(genre='Классика')}">Классика</a>
 </section>
 
 <footer>

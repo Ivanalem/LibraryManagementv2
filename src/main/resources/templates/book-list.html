@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Каталог книг</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .category {
+            display: inline-block;
+            margin: 0.25rem;
+            padding: 0.5rem 1rem;
+            background-color: #e3e6f0;
+            border-radius: 20px;
+            color: #343a40;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .category:hover {
+            background-color: #cdd4e0;
+        }
+
+        .card-title {
+            font-weight: bold;
+        }
+
+        footer {
+            margin-top: 4rem;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Навбар -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/}">📚 Библиотека</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" th:href="@{/logout}">Выход</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Контент -->
+<div class="container mt-5">
+    <h2 class="mb-4">📖 Каталог книг</h2>
+
+    <!-- Жанры -->
+    <div class="mb-4">
+        <h2 th:text="'Книги в жанре: ' + ${selectedGenre}">Жанр</h2>
+        <a class="category" th:href="@{/api/v1/books}">Все жанры</a>
+        <a class="category" th:href="@{/api/v1/genre/{genre}(genre='Фантастика')}">Фантастика</a>
+        <a class="category" th:href="@{/api/v1/genre/{genre}(genre='История')}">История</a>
+        <a class="category" th:href="@{/api/v1/genre/{genre}(genre='Научная литература')}">Научная литература</a>
+        <a class="category" th:href="@{/api/v1/genre/{genre}(genre='Детектив')}">Детективы</a>
+        <a class="category" th:href="@{/api/v1/genre/{genre}(genre='Классика')}">Классика</a>
+    </div>
+
+    <!-- Список книг -->
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col" th:each="book : ${books}">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${book.title}">Название книги</h5>
+                    <p class="card-text"><strong>Автор:</strong>
+                        <span th:if="${book.authors != null and !book.authors.isEmpty()}">
+                            <span th:each="author, iterStat : ${book.authors}">
+                                <span th:text="${author.name}"></span><span th:if="${!iterStat.last}">, </span>
+                            </span>
+                        </span>
+                        <span th:unless="${book.authors != null and !book.authors.isEmpty()}">Не указан</span>
+                    </p>
+                    <p class="card-text"><strong>Жанр:</strong> <span th:text="${book.genre}">Жанр</span></p>
+                    <p class="card-text"><strong>Год:</strong> <span th:text="${book.publishedYear}">Год</span></p>
+                </div>
+                <div class="card-footer text-center">
+                    <a th:href="@{/api/v1/book/{id}(id=${book.id})}" class="btn btn-primary">Подробнее</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Футер -->
+<footer class="text-center bg-dark text-white py-4 mt-5">
+    &copy; 2025 Ваша библиотека. Все права защищены.
+</footer>
+
+</body>
+</html>

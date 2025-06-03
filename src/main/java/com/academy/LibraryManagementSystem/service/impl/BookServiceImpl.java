@@ -74,4 +74,7 @@ public class BookServiceImpl implements BookService {
         bookRepository.save(book);
 
     }
+    public List<Book> findByGenre(String genre) {
+        return bookRepository.findByGenre(genre);
+    }
 }
