@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
     <meta charset="UTF-8">
     <title>Библиотека</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/style.css}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <style>
         body {
@@ -122,7 +122,8 @@
 
 <div class="search-bar">
     <form th:action="@{api/v1/search}" method="get" class="search-form">
-        <input type="text" name="query" placeholder="Поиск по названию книги или автору..." required>
+        <input type="text" class="form-control" name="query" placeholder="Поиск по названию книги или автору"
+               th:value="${param.query}" required>
         <button type="submit">🔍 Найти</button>
     </form>
 </div>

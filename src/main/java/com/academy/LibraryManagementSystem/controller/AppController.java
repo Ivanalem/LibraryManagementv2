@@ -19,10 +19,4 @@ public class AppController {
         model.addAttribute("user", principal.getName());
         return "index";
     }
-
-    @GetMapping("/403")
-    public String accessDenied() {
-        return "403"; // Покажет 403.html
-    }
-
 }

@@ -23,23 +23,13 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public List<Book> searchBooks(String query, String genre) {
-        if ((query == null || query.isEmpty()) && (genre == null || genre.isEmpty())) {
-            return bookRepository.findAll();
-        }
-
-        if (query != null && !query.isEmpty() && genre != null && !genre.isEmpty()) {
-            return bookRepository.findByTitleContainingIgnoreCaseAndGenreIgnoreCase(query, genre);
-        } else if (query != null && !query.isEmpty()) {
-            return bookRepository.findByTitleContainingIgnoreCase(query);
-        } else {
-            return bookRepository.findByGenreIgnoreCase(genre);
-        }
+    public List<Book> searchByTitleOrAuthor(String query) {
+        return bookRepository.findByTitleContainingIgnoreCaseOrAuthors_NameContainingIgnoreCase(query,query);
     }
 
     @Override
     public List<String> findAllGenres() {
-        return bookRepository.findDistinctGenres();
+        return bookRepository.findAllGenres();
     }
 
     @Override

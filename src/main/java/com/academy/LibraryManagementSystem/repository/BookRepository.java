@@ -21,6 +21,7 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     List<Book> findByTitleContainingIgnoreCaseAndGenreIgnoreCase(String title, String genre);
 
     @Query("SELECT DISTINCT b.genre FROM Book b WHERE b.genre IS NOT NULL")
-    List<String> findDistinctGenres();
+    List<String> findAllGenres();
+    List<Book> findByTitleContainingIgnoreCaseOrAuthors_NameContainingIgnoreCase(String title, String authors);
     List<Book> findByGenre(String genre);
 }

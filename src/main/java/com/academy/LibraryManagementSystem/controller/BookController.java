@@ -101,14 +101,12 @@ public class BookController {
     }
 
     @GetMapping("/search")
-    public String searchBooks(@RequestParam(required = false) String query,
-                              @RequestParam(required = false) String genre,
-                              Model model) {
+    public String searchBooks(@RequestParam("query") String query, Model model) {
 
-        List<Book> books = bookService.searchBooks(query, genre);
+        List<Book> books = bookService.searchByTitleOrAuthor(query);
         model.addAttribute("books", books);
-        model.addAttribute("genres", bookService.findAllGenres());
-        return "index";
+        model.addAttribute("query",query);
+        return "books";
     }
 
     @GetMapping("/book/{id}")

@@ -10,7 +10,8 @@ import java.util.Optional;
 @Service
 public interface BookService {
 
-    List<Book> searchBooks(String query, String genre);
+    List<Book> searchByTitleOrAuthor(String query);
+
     List<String> findAllGenres();
 
     List<Book> findAllBooks();
