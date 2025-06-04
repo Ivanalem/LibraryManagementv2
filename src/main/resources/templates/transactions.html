@@ -51,7 +51,7 @@
                     <span th:if="${transaction.status == 0}" class="badge bg-secondary">Завершена</span>
                 </td>
                 <td>
-                    <form th:action="@{/api/v1/transactions/return}" method="post" th:if="${transaction.status == 1}">
+                    <form th:action="@{/api/v1/return}" method="post" th:if="${transaction.status == 1}">
                         <input type="hidden" name="transactionId" th:value="${transaction.id}" />
                         <button type="submit" class="btn btn-sm btn-warning">🔄 Вернуть</button>
                     </form>
