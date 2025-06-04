@@ -24,12 +24,12 @@
 <div class="container my-5">
     <div class="card shadow">
         <div class="row g-0">
-            <div class="col-md-4">
-                <img src="/images/book-placeholder.png" class="img-fluid rounded-start" alt="Book Image">
-            </div>
             <div class="col-md-8">
                 <div class="card-body">
+                    <img src="/images/book-placeholder.png" class="img-fluid rounded-start" alt="Book Image">
                     <h3 class="card-title" th:text="${book.title}">Название книги</h3>
+                    <p class="card-text"><strong>Краткое описание:</strong> <span th:text="${book.description}"></span>
+                    </p>
                     <p class="card-text"><strong>Жанр:</strong> <span th:text="${book.genre}">Жанр</span></p>
                     <p class="card-text"><strong>Год публикации:</strong> <span
                             th:text="${book.publishedYear}">2023</span></p>
@@ -38,10 +38,16 @@
 
                     <p class="card-text">
                         <strong>Авторы:</strong>
-                        <span th:each="author, authorStat : ${book.authors}">
-    <span th:text="${author.name}">Имя Автора</span><span th:if="${!authorStat.last}">, </span>
-</span>
                     </p>
+                    <div th:each="author, authorStat : ${book.authors}" class="mb-2">
+                        <p class="mb-0">
+                            <span th:text="${author.name}">Имя Автора</span>
+                            <span th:if="${!authorStat.last}">, </span>
+                        </p>
+                        <p class="text-muted"><strong>Краткая биография:</strong>
+                            <span th:text="${author.biography}">Биография</span>
+                        </p>
+                    </div>
 
                     <div class="mt-4">
                         <!-- Кнопка "Взять книгу" -->
@@ -51,13 +57,20 @@
                         </form>
                         <!-- Кнопка возврата книги, если у пользователя есть активная транзакция -->
                         <form th:if="${transaction != null}" th:action="@{/transactions/return}" method="post">
-                            <input type="hidden" name="transactionId" th:value="${transaction.id}" />
+                            <input type="hidden" name="transactionId" th:value="${transaction.id}"/>
                             <button type="submit" class="btn btn-warning">🔄 Вернуть книгу</button>
                         </form>
 
                         <!-- Кнопка "Оставить отзыв" -->
                         <a th:href="@{/reviews/add(bookId=${book.id})}" class="btn btn-secondary ms-2">💬 Оставить
                             отзыв</a>
+
+                        <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                            <form th:action="@{/api/v1/admin/books/delete/{id}(id=${book.id})}" method="post"
+                                  onsubmit="return confirm('Удалить книгу?');">
+                                <button type="submit" class="btn btn-danger btn-sm mt-2">🗑 Удалить</button>
+                            </form>
+                        </li>
 
                     </div>
                 </div>

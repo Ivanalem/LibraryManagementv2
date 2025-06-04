@@ -60,10 +60,10 @@ public class AdminController {
         return "books";
     }
 
-    @GetMapping("/books/delete/{id}")
+    @PostMapping("/books/delete/{id}")
     public String deleteBook(@PathVariable Integer id) {
         bookService.deleteById(id);
-        return "redirect:/admin-users";
+        return "redirect:/api/v1/books";
     }
 
     @GetMapping("/users")
