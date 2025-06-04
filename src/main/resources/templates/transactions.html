@@ -1,28 +1,24 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Мои Транзакции</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <title>📋 Мои Транзакции</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/style.css}" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
 </head>
-<body>
+<body class="bg-light">
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand" th:href="@{/api/v1/index}">📚 Библиотека</a>
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav ms-auto">
-            </ul>
-        </div>
     </div>
 </nav>
 
 <div class="container mt-5">
     <h2 class="mb-4">📋 Мои Транзакции</h2>
-    <p th:if="${transactions != null}"></p>
 
-
-    <div th:if="${transactions.size() >= 0}">
-        <table class="table table-striped table-bordered">
+    <div th:if="${transactions != null and #lists.size(transactions) > 0}">
+        <table class="table table-bordered table-striped">
             <thead class="table-dark">
             <tr>
                 <th>Книга</th>
@@ -30,21 +26,32 @@
                 <th>Дата</th>
                 <th>Срок возврата</th>
                 <th>Статус</th>
-                <th>Действия</th>
+                <th>Действие</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="transaction : ${transactions}">
-                <td th:text="${transaction.book.title}">Название книги</td>
+                <td>
+                    <span th:if="${transaction.book != null}" th:text="${transaction.book.title}">Название</span>
+                    <span th:if="${transaction.book == null}" class="text-muted">Неизвестно</span>
+                </td>
                 <td th:text="${transaction.transactionType}">Тип</td>
-                <td th:text="${#temporals.format(transaction.transactionDate, 'dd.MM.yyyy HH:mm')}">Дата</td>
-                <td th:text="${transaction.dueDate != null ? #temporals.format(transaction.dueDate, 'dd.MM.yyyy') : '—'}">Срок</td>
+                <td>
+                    <span th:if="${transaction.transactionDate != null}"
+                          th:text="${#temporals.format(transaction.transactionDate.toInstant(), 'dd.MM.yyyy HH:mm')}">Дата</span>
+                    <span th:if="${transaction.transactionDate == null}">—</span>
+                </td>
+                <td>
+                    <span th:if="${transaction.dueDate != null}"
+                          th:text="${#temporals.format(transaction.dueDate.toInstant(), 'dd.MM.yyyy')}">Срок</span>
+                    <span th:if="${transaction.dueDate == null}">—</span>
+                </td>
                 <td>
                     <span th:if="${transaction.status == 1}" class="badge bg-success">Активна</span>
                     <span th:if="${transaction.status == 0}" class="badge bg-secondary">Завершена</span>
                 </td>
                 <td>
-                    <form th:action="@{/transactions/return}" method="post" th:if="${transaction.status == 1}">
+                    <form th:action="@{/api/v1/transactions/return}" method="post" th:if="${transaction.status == 1}">
                         <input type="hidden" name="transactionId" th:value="${transaction.id}" />
                         <button type="submit" class="btn btn-sm btn-warning">🔄 Вернуть</button>
                     </form>
@@ -54,10 +61,15 @@
             </tbody>
         </table>
     </div>
+
+    <div th:if="${transactions == null or #lists.isEmpty(transactions)}" class="alert alert-info">
+        У вас нет транзакций.
+    </div>
 </div>
 
 <footer class="text-center mt-5 mb-3">
     <small>© 2025 Библиотечная система</small>
 </footer>
+
 </body>
 </html>

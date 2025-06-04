@@ -9,15 +9,12 @@ import com.academy.LibraryManagementSystem.service.TransactionService;
 import com.academy.LibraryManagementSystem.service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import java.beans.PropertyEditorSupport;
 import java.util.List;
 import java.util.Set;
 
@@ -30,22 +27,11 @@ public class AdminController {
     private final UserService userService;
     private final TransactionService transactionService;
 
-    public AdminController(BookService bookService, UserRepository userRepository, UserService userService, TransactionService transactionService) {
+    public AdminController(BookService bookService, UserService userService, TransactionService transactionService) {
         this.bookService = bookService;
         this.userService = userService;
         this.transactionService = transactionService;
     }
-
-    @InitBinder
-    public void initBinder(WebDataBinder binder) {
-        binder.registerCustomEditor(User.Role.class, new PropertyEditorSupport() {
-            @Override
-            public void setAsText(String text) {
-                setValue(User.Role.valueOf(text));
-            }
-        });
-    }
-
 
     @GetMapping("/transaction")
     public String adminTransaction(Model model) {

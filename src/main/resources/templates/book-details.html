@@ -26,7 +26,6 @@
         <div class="row g-0">
             <div class="col-md-8">
                 <div class="card-body">
-                    <img src="/images/book-placeholder.png" class="img-fluid rounded-start" alt="Book Image">
                     <h3 class="card-title" th:text="${book.title}">Название книги</h3>
                     <p class="card-text"><strong>Краткое описание:</strong> <span th:text="${book.description}"></span>
                     </p>
@@ -51,13 +50,15 @@
 
                     <div class="mt-4">
                         <!-- Кнопка "Взять книгу" -->
-                        <form th:href="@{api/v1/borrow}" method="post" class="d-inline">
+                        <form th:action="@{/api/v1/borrow}" method="post" class="d-inline">
                             <input type="hidden" name="bookId" th:value="${book.id}"/>
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                             <button type="submit" class="btn btn-primary">📥 Взять книгу</button>
                         </form>
                         <!-- Кнопка возврата книги, если у пользователя есть активная транзакция -->
                         <form th:if="${transaction != null}" th:action="@{/api/v1/transactions/return}" method="post">
                             <input type="hidden" name="transactionId" th:value="${transaction.id}"/>
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                             <button type="submit" class="btn btn-warning">🔄 Вернуть книгу</button>
                         </form>
 

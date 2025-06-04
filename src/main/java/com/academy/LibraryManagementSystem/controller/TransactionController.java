@@ -57,13 +57,13 @@ public class TransactionController {
     @PostMapping("/borrow")
     public String borrowBook(@RequestParam("bookId") Integer bookId, Principal principal) {
         transactionService.borrowBook(bookId, principal.getName());
-        return "redirect:/book-details";
+        return "redirect:/api/v1/books";
     }
 
     @PostMapping("/return")
     public String returnBook(@RequestParam("transactionId") Integer transactionId) {
         transactionService.returnBook(transactionId);
-        return "redirect:transactions";
+        return "redirect:/api/v1/transaction";
     }
 
     @GetMapping("/transaction")
