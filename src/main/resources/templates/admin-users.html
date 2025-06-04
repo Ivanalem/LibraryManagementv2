@@ -17,7 +17,7 @@
         <tr>
             <th>Username</th>
             <th>Email</th>
-            <th>Role</th>
+            <th>Status</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -29,16 +29,16 @@
                 <span th:unless="${user.email}">N/A</span>
             </td>
             <td>
-                <form th:action="@{/users/{id}/change-role(id=${user.id})}" method="post">
-                    <select name="role" class="form-select"
-                            th:onchange="this.form.submit()">
-                        <option th:each="role : ${roles}"
-                                th:value="${role}"
-                                th:selected="${role == user.role}"
-                                th:text="${role}"></option>
-                    </select>
+                <form th:action="@{/api/v1/admin/users/{email}/toggle-status(email=${user.email})}" method="post">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button type="submit"
+                            th:text="${user.status == 'ACTIVE'} ? 'Деактивировать' : 'Активировать'"
+                            class="btn"
+                            th:classappend="${user.status == 'ACTIVE'} ? 'btn-warning' : 'btn-success'">
+                    </button>
                 </form>
             </td>
+
             <td>
                 <form th:action="@{/api/v1/admin/delete_user/{email}(email=${user.email})}" method="post" style="display:inline">
                     <button type="submit" class="btn btn-sm btn-danger"

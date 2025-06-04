@@ -47,7 +47,7 @@ public class ReviewController {
     }
 
     @Transactional
-    @DeleteMapping("delete_comment/{comment}")
+    @DeleteMapping("/delete_comment/{comment}")
     public void deleteByComment(@PathVariable Integer reviewId) {
         reviewService.deleteReview(reviewId);
     }

@@ -9,12 +9,15 @@ import com.academy.LibraryManagementSystem.service.TransactionService;
 import com.academy.LibraryManagementSystem.service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import java.beans.PropertyEditorSupport;
 import java.util.List;
 import java.util.Set;
 
@@ -31,6 +34,16 @@ public class AdminController {
         this.bookService = bookService;
         this.userService = userService;
         this.transactionService = transactionService;
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(User.Role.class, new PropertyEditorSupport() {
+            @Override
+            public void setAsText(String text) {
+                setValue(User.Role.valueOf(text));
+            }
+        });
     }
 
 
@@ -69,7 +82,7 @@ public class AdminController {
     @GetMapping("/users")
     public String userList(Model model) {
         List<User> users = userService.findAllUsers();
-        List<String> roles = List.of("USER", "ADMIN"); // или откуда берёте
+        List<String> roles = List.of("USER", "ADMIN");
 
         model.addAttribute("users", users);
         model.addAttribute("roles", roles);
@@ -77,10 +90,17 @@ public class AdminController {
 
     }
 
-    @PostMapping("/users/{id}/change-role")
-    public String changeUserRole(@PathVariable Integer id, @RequestParam User.Role newRole) {
-        userService.changeUserRole(id, newRole);
-        return "redirect:/admin-users";
+    @PostMapping("/users/{email}/toggle-status")
+    public String toggleUserStatus(@PathVariable String email) {
+        User user = userService.findByEmail(email);
+        if ("ACTIVE".equals(user.getStatus())) {
+            user.setStatus("INACTIVE");
+        } else {
+            user.setStatus("ACTIVE");
+        }
+
+        userService.saveUser(user);
+        return "redirect:/api/v1/admin/users";
     }
 
     @Bean

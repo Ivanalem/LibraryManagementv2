@@ -57,7 +57,7 @@ public class TransactionController {
     @PostMapping("/borrow")
     public String borrowBook(@RequestParam("bookId") Integer bookId, Principal principal) {
         transactionService.borrowBook(bookId, principal.getName());
-        return "redirect:/book-details" + bookId;
+        return "redirect:/book-details";
     }
 
     @PostMapping("/return")

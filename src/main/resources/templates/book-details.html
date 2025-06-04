@@ -51,12 +51,12 @@
 
                     <div class="mt-4">
                         <!-- Кнопка "Взять книгу" -->
-                        <form th:action="@{/books/borrow}" method="post" class="d-inline">
+                        <form th:href="@{api/v1/borrow}" method="post" class="d-inline">
                             <input type="hidden" name="bookId" th:value="${book.id}"/>
                             <button type="submit" class="btn btn-primary">📥 Взять книгу</button>
                         </form>
                         <!-- Кнопка возврата книги, если у пользователя есть активная транзакция -->
-                        <form th:if="${transaction != null}" th:action="@{/transactions/return}" method="post">
+                        <form th:if="${transaction != null}" th:action="@{/api/v1/transactions/return}" method="post">
                             <input type="hidden" name="transactionId" th:value="${transaction.id}"/>
                             <button type="submit" class="btn btn-warning">🔄 Вернуть книгу</button>
                         </form>
