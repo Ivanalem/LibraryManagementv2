@@ -75,7 +75,7 @@ public class ReviewController {
         Optional<Review> existingReview = reviewService.getUserReviewForBook(bookId, user.getId());
         if (existingReview.isPresent()) {
             redirectAttributes.addFlashAttribute("error", "Вы уже оставили отзыв.");
-            return "redirect:/api/v1/books/" + bookId;
+            return "redirect:/api/v1/books";
         }
 
         Book book = bookService.findBookById(bookId);
@@ -84,38 +84,8 @@ public class ReviewController {
         review.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
         reviewService.saveReview(review);
-        return "redirect:/api/v1/books/" + bookId;
+        return "redirect:/api/v1/books/";
     }
-
-    @PostMapping("/reviews/{id}/delete")
-    public String deleteReview(@PathVariable Integer id, Principal principal, RedirectAttributes redirectAttributes) {
-        Review review = reviewService.findAllReviews().stream()
-                .filter(r -> r.getId().equals(id))
-                .findFirst()
-                .orElse(null);
-
-        if (review == null) {
-            redirectAttributes.addFlashAttribute("error", "Отзыв не найден.");
-            return "redirect:/api/v1/books";
-        }
-
-        User currentUser = userService.findByEmail(principal.getName());
-
-        boolean isAdmin = currentUser.getRole().stream()
-                .anyMatch(role -> role.name().equals("ROLE_ADMIN"));
-
-        boolean isOwner = review.getUser().getUsername().equals(principal.getName());
-
-        if (!isOwner && !isAdmin) {
-            redirectAttributes.addFlashAttribute("error", "Вы не можете удалить чужой отзыв.");
-            return "redirect:/api/v1/books/" + review.getBook().getId();
-        }
-
-        reviewService.deleteReview(id);
-        return "redirect:/api/v1/books/" + review.getBook().getId();
-    }
-
-
     // Показать форму отзыва
     @GetMapping("/books/{bookId}/reviews")
     public String showReviewForm(@PathVariable Integer bookId, Model model) {
