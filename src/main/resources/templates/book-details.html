@@ -63,7 +63,7 @@
                         </form>
 
                         <!-- Кнопка "Оставить отзыв" -->
-                        <a th:href="@{/reviews/add(bookId=${book.id})}" class="btn btn-secondary ms-2">💬 Оставить
+                        <a th:href="@{/api/v1/reviews/books/{bookId}/reviews(bookId=${book.id})}" class="btn btn-secondary ms-2">💬 Оставить
                             отзыв</a>
 
                         <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
@@ -95,6 +95,11 @@
                 <p class="card-text"><small class="text-muted"
                                             th:text="${#dates.format(review.createdAt, 'dd.MM.yyyy')}">Дата</small></p>
             </div>
+            <!-- Показывать кнопку, если текущий пользователь — автор отзыва или админ -->
+            <form th:action="@{/api/v1/reviews/reviews/{id}/delete(id=${review.id})}" method="post"
+                  th:if="${#authentication.name == review.user.username or #authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+                <button type="submit" class="btn btn-danger btn-sm">🗑 Удалить</button>
+            </form>
         </div>
     </div>
 </div>

@@ -26,4 +26,5 @@ public interface BookService {
     void saveBookWithAuthors(Book book, List<Author> authors);
     List<Book> findByGenre(String genre);
 
+    Book findBookById(Integer bookId);
 }

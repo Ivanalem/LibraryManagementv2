@@ -52,4 +52,9 @@ public class ReviewServiceImpl implements ReviewService {
         return reviewRepository.findByBookIdAndUserId(bookId, userId);
     }
 
+    @Override
+    public Optional<Review> findReviewById(Integer id) {
+        return reviewRepository.findById(id);
+    }
+
 }

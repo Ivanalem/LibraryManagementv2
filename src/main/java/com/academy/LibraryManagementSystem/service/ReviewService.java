@@ -20,6 +20,7 @@ public interface ReviewService {
     void deleteReview(Integer reviewId);
 
     Optional<Review> getUserReviewForBook(Integer bookId, Integer userId);
+    Optional<Review> findReviewById(Integer id);
 
 
 }

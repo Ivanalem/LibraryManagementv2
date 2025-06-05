@@ -7,8 +7,11 @@ import com.academy.LibraryManagementSystem.service.BookService;
 import com.academy.LibraryManagementSystem.service.ReviewService;
 import com.academy.LibraryManagementSystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -36,7 +39,7 @@ public class ReviewController {
         return reviewService.findAllReviews();
     }
 
-    @PostMapping("save_review")
+    @PostMapping("/save_review")
     public Review saveReview(@RequestBody Review review) {
         return reviewService.saveReview(review);
     }
@@ -54,39 +57,72 @@ public class ReviewController {
 
     @PostMapping("/books/{bookId}/reviews")
     public String submitReview(@PathVariable Integer bookId,
-                               @RequestParam int rating,
-                               @RequestParam String comment,
+                               @ModelAttribute Review review,
                                Principal principal,
                                RedirectAttributes redirectAttributes) {
 
-        User user = userService.findByEmail(principal.getName());
-        Optional<Review> existingReview = reviewService.getUserReviewForBook(bookId, user.getId());
-
-        if (existingReview.isPresent()) {
-            redirectAttributes.addFlashAttribute("error", "Вы уже оставили отзыв.");
-            return "redirect:/books/" + bookId;
+        if (principal == null) {
+            redirectAttributes.addFlashAttribute("error", "Вы должны войти в систему.");
+            return "redirect:/api/v1/login";
         }
 
-        Book book = bookService.findAllBooks().get(bookId);
-        Review review = new Review();
+        User user = userService.findByUsername(principal.getName()).orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));;
+        if (user == null) {
+            redirectAttributes.addFlashAttribute("error", "Пользователь не найден.");
+            return "redirect:/api/v1/login";
+        }
+
+        Optional<Review> existingReview = reviewService.getUserReviewForBook(bookId, user.getId());
+        if (existingReview.isPresent()) {
+            redirectAttributes.addFlashAttribute("error", "Вы уже оставили отзыв.");
+            return "redirect:/api/v1/books/" + bookId;
+        }
+
+        Book book = bookService.findBookById(bookId);
         review.setBook(book);
         review.setUser(user);
-        review.setRating(rating);
-        review.setComment(comment);
         review.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
         reviewService.saveReview(review);
-        return "redirect:/books/" + bookId;
+        return "redirect:/api/v1/books/" + bookId;
     }
+
     @PostMapping("/reviews/{id}/delete")
     public String deleteReview(@PathVariable Integer id, Principal principal, RedirectAttributes redirectAttributes) {
-        Review review = reviewService.findAllReviews().get(id);
-        if (!review.getUser().getUsername().equals(principal.getName())) {
-            redirectAttributes.addFlashAttribute("error", "Вы не можете удалить чужой отзыв.");
-            return "redirect:/books/" + review.getBook().getId();
+        Review review = reviewService.findAllReviews().stream()
+                .filter(r -> r.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+
+        if (review == null) {
+            redirectAttributes.addFlashAttribute("error", "Отзыв не найден.");
+            return "redirect:/api/v1/books";
         }
+
+        User currentUser = userService.findByEmail(principal.getName());
+
+        boolean isAdmin = currentUser.getRole().stream()
+                .anyMatch(role -> role.name().equals("ROLE_ADMIN"));
+
+        boolean isOwner = review.getUser().getUsername().equals(principal.getName());
+
+        if (!isOwner && !isAdmin) {
+            redirectAttributes.addFlashAttribute("error", "Вы не можете удалить чужой отзыв.");
+            return "redirect:/api/v1/books/" + review.getBook().getId();
+        }
+
         reviewService.deleteReview(id);
-        return "redirect:/books/" + review.getBook().getId();
+        return "redirect:/api/v1/books/" + review.getBook().getId();
     }
+
+
+    // Показать форму отзыва
+    @GetMapping("/books/{bookId}/reviews")
+    public String showReviewForm(@PathVariable Integer bookId, Model model) {
+        model.addAttribute("review", new Review()); // напрямую сущность Review
+        model.addAttribute("bookId", bookId);
+        return "review-form";
+    }
+
 
 }

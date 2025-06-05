@@ -56,13 +56,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void changeUserRole(Integer Id, User.Role newRole) {
-        User user = userRepository.findById(Id).orElseThrow();
-        user.setRole(Collections.singleton(newRole));
-        userRepository.save(user);
-    }
-
-    @Override
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }

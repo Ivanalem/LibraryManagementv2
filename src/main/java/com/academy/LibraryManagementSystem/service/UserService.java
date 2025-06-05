@@ -19,7 +19,6 @@ public interface UserService {
 
     void deleteByEmail(String email);
 
-    void changeUserRole(Integer Id, User.Role newRole);
 
     Optional<User> findByUsername(String username);
 }
