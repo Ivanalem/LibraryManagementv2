@@ -40,8 +40,7 @@ public class AuthenticationController {
     @PostMapping("/login")
     public String formLogin(@RequestParam String username,
                             @RequestParam String password,
-                            Model model,
-                            HttpServletRequest request) {
+                            Model model) {
         try {
             UsernamePasswordAuthenticationToken authToken =
                     new UsernamePasswordAuthenticationToken(username, password);

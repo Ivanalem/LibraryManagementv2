@@ -54,7 +54,7 @@ public class ReviewController {
     public void deleteByComment(@PathVariable Integer reviewId) {
         reviewService.deleteReview(reviewId);
     }
-
+    //the form of leaving a comment
     @PostMapping("/books/{bookId}/reviews")
     public String submitReview(@PathVariable Integer bookId,
                                @ModelAttribute Review review,
@@ -86,13 +86,11 @@ public class ReviewController {
         reviewService.saveReview(review);
         return "redirect:/api/v1/books/";
     }
-    // Показать форму отзыва
+    // Show the review form
     @GetMapping("/books/{bookId}/reviews")
     public String showReviewForm(@PathVariable Integer bookId, Model model) {
         model.addAttribute("review", new Review()); // напрямую сущность Review
         model.addAttribute("bookId", bookId);
         return "review-form";
     }
-
-
 }

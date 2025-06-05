@@ -33,6 +33,8 @@ public class AdminController {
         this.transactionService = transactionService;
     }
 
+
+    //search for all transactions and display
     @GetMapping("/transaction")
     public String adminTransaction(Model model) {
         List<Transaction> transactions = transactionService.findAllTransactions();
