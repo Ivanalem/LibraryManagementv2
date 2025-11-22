@@ -8,7 +8,7 @@ import com.academy.LibraryManagementSystem.service.ReviewService;
 import com.academy.LibraryManagementSystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -27,6 +27,7 @@ public class ReviewController {
     private final ReviewService reviewService;
     private final BookService bookService;
     private final UserService userService;
+
     @Autowired
     public ReviewController(ReviewService reviewService, BookService bookService, UserService userService) {
         this.reviewService = reviewService;
@@ -54,19 +55,20 @@ public class ReviewController {
     public void deleteByComment(@PathVariable Integer reviewId) {
         reviewService.deleteReview(reviewId);
     }
-    //the form of leaving a comment
+
+    // the form of leaving a comment
     @PostMapping("/books/{bookId}/reviews")
     public String submitReview(@PathVariable Integer bookId,
-                               @ModelAttribute Review review,
-                               Principal principal,
-                               RedirectAttributes redirectAttributes) {
+            @ModelAttribute Review review,
+            Principal principal,
+            RedirectAttributes redirectAttributes) {
 
         if (principal == null) {
             redirectAttributes.addFlashAttribute("error", "Вы должны войти в систему.");
             return "redirect:/api/v1/login";
         }
 
-        User user = userService.findByUsername(principal.getName()).orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));;
+        User user = userService.findByUsername(principal.getName()).orElse(null);
         if (user == null) {
             redirectAttributes.addFlashAttribute("error", "Пользователь не найден.");
             return "redirect:/api/v1/login";
@@ -86,6 +88,7 @@ public class ReviewController {
         reviewService.saveReview(review);
         return "redirect:/api/v1/books/";
     }
+
     // Show the review form
     @GetMapping("/books/{bookId}/reviews")
     public String showReviewForm(@PathVariable Integer bookId, Model model) {

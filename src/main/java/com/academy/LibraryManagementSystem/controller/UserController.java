@@ -25,6 +25,9 @@ public class UserController {
 
     @PostMapping("/save_user")
     public String saveUser(@RequestBody User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
         userService.saveUser(user);
         return "User successfully saved";
     }
@@ -36,6 +39,9 @@ public class UserController {
 
     @PutMapping("/update_user")
     public User updateUser(@RequestBody User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
         return userService.updateUser(user);
     }
 

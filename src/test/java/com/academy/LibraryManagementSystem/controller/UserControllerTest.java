@@ -50,7 +50,7 @@ class UserControllerTest {
 
     @Test
     void saveUser_ShouldSaveUserAndReturnSuccessMessage() {
-        doNothing().when(userService).saveUser(testUser);
+        when(userService.saveUser(testUser)).thenReturn(testUser);
 
         String result = userController.saveUser(testUser);
 

@@ -21,10 +21,9 @@ public class BookServiceImpl implements BookService {
         this.authorRepository = authorRepository;
     }
 
-
     @Override
     public List<Book> searchByTitleOrAuthor(String query) {
-        return bookRepository.findByTitleContainingIgnoreCaseOrAuthors_NameContainingIgnoreCase(query,query);
+        return bookRepository.findByTitleContainingIgnoreCaseOrAuthors_NameContainingIgnoreCase(query, query);
     }
 
     @Override
@@ -39,6 +38,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book saveBook(Book book) {
+        if (book == null) {
+            throw new IllegalArgumentException("Book cannot be null");
+        }
         return bookRepository.save(book);
     }
 
@@ -47,9 +49,11 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findById(id);
     }
 
-
     @Override
     public Book updateBook(Book book) {
+        if (book == null) {
+            throw new IllegalArgumentException("Book cannot be null");
+        }
         return bookRepository.save(book);
     }
 
@@ -60,10 +64,17 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void saveBookWithAuthors(Book book, List<Author> authors) {
+        if (book == null) {
+            throw new IllegalArgumentException("Book cannot be null");
+        }
+        if (authors == null) {
+            throw new IllegalArgumentException("Authors list cannot be null");
+        }
         authorRepository.saveAll(authors);
         bookRepository.save(book);
 
     }
+
     public List<Book> findByGenre(String genre) {
         return bookRepository.findByGenre(genre);
     }
