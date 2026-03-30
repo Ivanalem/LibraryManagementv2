@@ -26,7 +26,8 @@ public class AuthenticationController {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationController(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
+    public AuthenticationController(UserRepository userRepository, PasswordEncoder passwordEncoder,
+            AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
@@ -39,11 +40,10 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public String formLogin(@RequestParam String username,
-                            @RequestParam String password,
-                            Model model) {
+            @RequestParam String password,
+            Model model) {
         try {
-            UsernamePasswordAuthenticationToken authToken =
-                    new UsernamePasswordAuthenticationToken(username, password);
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
 
             Authentication authentication = authenticationManager.authenticate(authToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -63,7 +63,6 @@ public class AuthenticationController {
         }
     }
 
-
     @GetMapping("/register")
     public String registerForm(Model model) {
         model.addAttribute("user", new User());
@@ -72,12 +71,15 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public String registerSubmit(@ModelAttribute User user, Model model) {
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
         try {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setRole(Set.of(User.Role.ROLE_USER));
             userRepository.save(user);
-        }catch (DataIntegrityViolationException e) {
-        model.addAttribute("error", "Пользователь с таким email уже зарегистрирован.");
+        } catch (DataIntegrityViolationException e) {
+            model.addAttribute("error", "Пользователь с таким email уже зарегистрирован.");
         }
         return "redirect:/login";
     }

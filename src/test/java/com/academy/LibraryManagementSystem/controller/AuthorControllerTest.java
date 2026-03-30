@@ -14,11 +14,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
+import org.springframework.security.test.context.support.WithMockUser;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(AuthorController.class)
 @Import(MockServiceTestConfig.class)
+@WithMockUser
 public class AuthorControllerTest {
 
     @Autowired
@@ -47,8 +50,9 @@ public class AuthorControllerTest {
         author.setName("Tolkien");
 
         mockMvc.perform(post("/api/v1/authors/save_author")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(author)))
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(author)))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Author successfully saved"));
     }
@@ -65,4 +69,3 @@ public class AuthorControllerTest {
                 .andExpect(jsonPath("$.name").value("Orwell"));
     }
 }
-

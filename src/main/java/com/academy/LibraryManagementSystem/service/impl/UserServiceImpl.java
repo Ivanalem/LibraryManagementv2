@@ -1,6 +1,5 @@
 package com.academy.LibraryManagementSystem.service.impl;
 
-
 import com.academy.LibraryManagementSystem.model.User;
 
 import com.academy.LibraryManagementSystem.repository.UserRepository;
@@ -10,11 +9,9 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
 
 @Primary
 @Service
@@ -36,9 +33,11 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User saveUser(User user) {
-            return userRepository.save(user);
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
         }
-
+        return userRepository.save(user);
+    }
 
     @Override
     public User findByEmail(String email) {
@@ -47,6 +46,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
         return userRepository.save(user);
     }
 
