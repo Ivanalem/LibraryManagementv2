@@ -1,0 +1,6 @@
+CREATE TABLE authors(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255),
+    biography VARCHAR(500),
+    created_at TIMESTAMP
+);

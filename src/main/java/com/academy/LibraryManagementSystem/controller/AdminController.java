@@ -7,6 +7,7 @@ import com.academy.LibraryManagementSystem.repository.UserRepository;
 import com.academy.LibraryManagementSystem.service.BookService;
 import com.academy.LibraryManagementSystem.service.TransactionService;
 import com.academy.LibraryManagementSystem.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;

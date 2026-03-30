@@ -2,12 +2,13 @@ package com.academy.LibraryManagementSystem.controller;
 
 import com.academy.LibraryManagementSystem.model.User;
 import com.academy.LibraryManagementSystem.service.UserService;
+import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/api/v1/users")
 public class UserController {
 
