@@ -15,9 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 @RequestMapping("/api/v1")
@@ -61,7 +59,7 @@ public class BookController {
             }
 
             // Инициализация списка книг вручную
-            List<Book> authoredBooks = new ArrayList<>();
+            Set<Book> authoredBooks = new HashSet<>();
             authoredBooks.add(book);
             author.setBooks(authoredBooks);
 

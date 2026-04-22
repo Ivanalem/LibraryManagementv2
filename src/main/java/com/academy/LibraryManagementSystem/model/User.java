@@ -15,7 +15,7 @@ import java.util.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User  {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -38,6 +38,7 @@ public class User  {
         ROLE_USER,
         ROLE_ADMIN,
     }
+
     @PrePersist
     public void prePersist() {
         if (status == null) {
