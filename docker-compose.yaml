@@ -9,7 +9,7 @@
       environment:
         MYSQL_USER: ${MYSQL_USER:-root}
         MYSQL_PASSWORD: ${MYSQL_PASSWORD:-Alem4ikivan4ik}
-        MYSQL_DATABASE: ${MYSQL_DB:-petprojectschema}
+        MYSQL_DATABASE: ${MYSQL_DATABASE:-petprojectschema}
 
       volumes:
         - mysql_data:/var/lib/mysql
