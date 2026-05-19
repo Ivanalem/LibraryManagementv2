@@ -24,6 +24,7 @@ public interface BookService {
     Book updateBook(Book book);
 
     void deleteById(Integer id);
+
     void saveBookWithAuthors(Book book, List<Author> authors);
     List<Book> findByGenre(String genre);
 

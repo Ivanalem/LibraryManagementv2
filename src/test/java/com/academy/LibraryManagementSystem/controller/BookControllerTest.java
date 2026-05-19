@@ -32,7 +32,7 @@ public class BookControllerTest {
         bookService = mock(BookService.class);
         userService = mock(UserService.class);
         reviewService = mock(ReviewService.class);
-        controller = new BookController(bookService, userService, reviewService, null);
+        controller = new BookController(bookService, userService, reviewService);
         model = mock(Model.class);
     }
 

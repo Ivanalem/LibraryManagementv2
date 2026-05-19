@@ -8,9 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @Entity
@@ -33,5 +31,5 @@ public class Author {
             joinColumns = @JoinColumn(name = "author_id"), // Внешний ключ для автора
             inverseJoinColumns = @JoinColumn(name = "book_id") // Внешний ключ для книги
     )
-    private Set<Book> books = new HashSet<>();
+    private List<Book> books = new ArrayList<>();
 }

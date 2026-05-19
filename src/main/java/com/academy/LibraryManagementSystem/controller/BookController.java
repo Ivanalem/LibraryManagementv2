@@ -26,7 +26,7 @@ public class BookController {
     private final ReviewService reviewService;
 
     @Autowired
-    public BookController(BookService bookService, UserService userService, ReviewService reviewService, BookRepository bookRepository) {
+    public BookController(BookService bookService, UserService userService, ReviewService reviewService) {
         this.bookService = bookService;
         this.userService = userService;
         this.reviewService = reviewService;
@@ -59,7 +59,7 @@ public class BookController {
             }
 
             // Инициализация списка книг вручную
-            Set<Book> authoredBooks = new HashSet<>();
+            List<Book> authoredBooks = new ArrayList<>();
             authoredBooks.add(book);
             author.setBooks(authoredBooks);
 

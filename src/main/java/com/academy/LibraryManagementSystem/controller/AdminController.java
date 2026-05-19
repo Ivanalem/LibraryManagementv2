@@ -61,7 +61,7 @@ public class AdminController {
         model.addAttribute("books", bookService.findAllBooks());
         return "books";
     }
-
+    @Transactional
     @PostMapping("/books/delete/{id}")
     public String deleteBook(@PathVariable Integer id) {
         bookService.deleteById(id);

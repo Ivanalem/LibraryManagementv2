@@ -43,8 +43,8 @@
                             <span th:text="${author.name}">Имя Автора</span>
                             <span th:if="${!authorStat.last}">, </span>
                         </p>
-                        <p class="text-muted"><strong>Краткая биография:</strong>
-                            <span th:text="${author.biography}">Биография</span>
+
+                        <p class="card-text"><strong>Краткая биография:</strong> <span th:text="${author.biography}"></span>
                         </p>
                     </div>
 
