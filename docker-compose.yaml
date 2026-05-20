@@ -1,23 +1,31 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_base
 
-  services:
-    mysql:
-      image: mysql:8.0
-      container_name: mysql_base
-      ports:
-        - "${MYSQL_PORT:-3306}:3306"
+    ports:
+      - "3306:3306"
 
-      environment:
-        MYSQL_USER: ${MYSQL_USER:-root}
-        MYSQL_PASSWORD: ${MYSQL_PASSWORD:-Alem4ikivan4ik}
-        MYSQL_DATABASE: ${MYSQL_DATABASE:-petprojectschema}
+    environment:
+      MYSQL_ROOT_PASSWORD: Alem4ikivan4ik
+      MYSQL_DATABASE: petprojectschema
 
-      volumes:
-        - mysql_data:/var/lib/mysql
-      restart: unless-stopped
+    volumes:
+      - mysql_data:/var/lib/mysql
 
-      command:
-        --max_connections=100
+    restart: unless-stopped
 
+    command: --max_connections=100
 
-  volumes:
-    mysql_data:
+  app:
+    build: .
+    container_name: library-app
+
+    ports:
+      - "8080:8080"
+
+    depends_on:
+      - mysql
+
+volumes:
+  mysql_data:
