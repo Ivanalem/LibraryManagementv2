@@ -29,6 +29,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/v1/admin/transaction").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user/**").hasRole("USER")
+                        .requestMatchers("/api/v1/ai/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

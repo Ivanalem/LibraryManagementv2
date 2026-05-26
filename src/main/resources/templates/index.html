@@ -2,6 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <title>Библиотека</title>
     <link rel="stylesheet" th:href="@{/style.css}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -102,6 +104,36 @@
     <ul>
         <li><a th:href="@{/api/v1/index}">Главная</a></li>
         <li th:if="${#authorization.expression('hasRole(''USER'')')}"><a th:href="@{/api/v1/transaction}">Мои операции</a></li>
+
+        <!-- AI chat -->
+
+        <div class="ai-chat-button" onclick="toggleChat()">
+            🤖
+        </div>
+
+        <div class="ai-chat-window" id="chatWindow">
+
+            <div class="chat-header">
+                AI Библиотекарь
+            </div>
+
+            <div class="chat-body" id="chatBody">
+                <p>Здравствуйте! Что вы хотите почитать?</p>
+            </div>
+
+            <div class="chat-input">
+
+                <input type="text"
+                       id="prompt"
+                       placeholder="Например: книги по Java">
+
+                <button onclick="askAi()">
+                    Отправить
+                </button>
+
+            </div>
+
+        </div>
     </ul>
 </nav>
 <div th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
@@ -110,8 +142,9 @@
     <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a th:href="@{/api/v1/admin/save_book}">Добавить книгу</a></li>
     <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a th:href="@{/api/v1/admin/users}">Пользователи</a></li>
     <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a th:href="@{/api/v1/admin/transaction}">Мои операции</a></li>
+
     </ul>
-</div>
+    </div>
 
 <div th:if="${#authorization.expression('hasRole(''USER'')')}">
     <h2>Добро пожаловать, Читатель!</h2>
@@ -139,5 +172,66 @@
     &copy; 2025 Библиотека. Все права защищены.
 </footer>
 
+<!-- Script for chat AI -->
+<script>
+    const csrfToken =
+        document.querySelector('meta[name="_csrf"]').content;
+
+    const csrfHeader =
+        document.querySelector('meta[name="_csrf_header"]').content;
+
+    function toggleChat() {
+
+        const chat = document.getElementById("chatWindow");
+
+        if (chat.style.display === "block") {
+            chat.style.display = "none";
+        } else {
+            chat.style.display = "block";
+        }
+    }
+
+    async function askAi() {
+
+        const promptInput = document.getElementById("prompt");
+
+        const prompt = promptInput.value;
+
+        if (!prompt.trim()) {
+            return;
+        }
+
+        const chatBody = document.getElementById("chatBody");
+
+        chatBody.innerHTML += `
+            <p><strong>Вы:</strong> ${prompt}</p>
+        `;
+
+        promptInput.value = "";
+
+        const response = await fetch("/api/v1/ai/recommend", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json",
+                [csrfHeader]: csrfToken
+            },
+
+            body: JSON.stringify({
+                prompt: prompt
+            })
+        });
+
+        const data = await response.json();
+
+        chatBody.innerHTML += `
+            <p><strong>AI:</strong> ${data.response}</p>
+        `;
+
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+</script>
 </body>
 </html>
