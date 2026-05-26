@@ -27,4 +27,4 @@ ROLE ADMIN:
 Как запустить приложение/How to start the app:
 
 1. В командной строке IDE прописываете(In the command line, write): git clone https://github.com/Ivanalem/LibraryManagementv2.git
-2. После успешного скачивания в командной строке прописываете(After receiving the download, the following is written in the command line): docker compose up --build 
+2. После успешного скачивания в командной строке прописываете(After receiving the download, the following is written in the command line): docker compose up 
