@@ -28,3 +28,4 @@ ROLE ADMIN:
 
 1. docker pull ivanalem/librarymanagement-db:8.0
 2. docker pull ivanalem/librarymanagementv2:latest
+3. docker compose up
