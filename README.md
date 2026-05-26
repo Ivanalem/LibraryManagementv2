@@ -1,4 +1,4 @@
-Library Management System — веб-приложение для управления библиотекой с AI-рекомендациями книг.
+Library Management System — веб-приложение для управления библиотекой с AI-рекомендациями книг(It's web library management app with AI-powered book recommendations).
 
 Стэк технологий(technology stack):
 Java 21
@@ -24,3 +24,7 @@ ROLE ADMIN:
 управление пользователями/User management
 управление операциями/Transaction management
 
+Как запустить приложение/How to start the app:
+
+1. В командной строке IDE прописываете(In the command line, write): git clone
+2. docker compose up --build 
