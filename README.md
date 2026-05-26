@@ -1,16 +1,16 @@
 Library Management System — веб-приложение для управления библиотекой с AI-рекомендациями книг(It's web library management app with AI-powered book recommendations).
 
 Стэк технологий(technology stack):
-Java 21
-Spring Boot
-Spring Security
-Spring Data JPA
-Hibernate
-MySQL
-Docker
-Docker Compose
-Thymeleaf
-OpenRouter API
+|Java 21|
+|Spring Boot|
+|Spring Security|
+|Spring Data JPA|
+|Hibernate|
+|MySQL|
+|Docker|
+|Docker Compose|
+|Thymeleaf|
+|OpenRouter API|
 
 Функционал приложения(application functionality):
 ROLE USER:
