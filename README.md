@@ -14,15 +14,15 @@ Library Management System — веб-приложение для управле�
 
 Функционал приложения(application functionality):
 ROLE USER:
-просмотр каталога/Browse the catalog
-поиск книг/Search for books
-операции с книгами/Book operations
-AI рекомендации/AI recommendationallity
+просмотр каталога/Browse the catalog;
+поиск книг/Search for books;
+операции с книгами/Book operations;
+AI рекомендации/AI recommendationallity;
 ROLE ADMIN:
-добавление книг/adding books
-удаление книг/delete books
-управление пользователями/User management
-управление операциями/Transaction management
+добавление книг/adding books;
+удаление книг/delete books;
+управление пользователями/User management;
+управление операциями/Transaction management;
 
 Как запустить приложение/How to start the app:
 
